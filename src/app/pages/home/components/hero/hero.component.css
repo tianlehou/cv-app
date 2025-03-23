@@ -1,0 +1,24 @@
+header {
+    padding: 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-image: url('../../../../../assets/banner.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 300px;
+    width: 100%;
+    position: relative;
+}
+
+app-custom-button {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: 10;
+}
+
+section {
+    margin-top: -2.5em;
+}

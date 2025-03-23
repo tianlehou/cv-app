@@ -1,0 +1,52 @@
+<div class="profile-container">
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <!-- Sobre mí -->
+    <div class="form-group">
+      <label>Sobre mí:</label>
+
+      <!-- Textarea editable -->
+      <textarea
+        *ngIf="editableFields['aboutMe']"
+        formControlName="aboutMe"
+        class="form-control"
+      ></textarea>
+
+      <!-- Texto no editable con saltos de línea -->
+      <div
+        *ngIf="!editableFields['aboutMe']"
+        class="non-editable-text"
+        [innerText]="profileForm.get('aboutMe')?.value"
+      ></div>
+
+      <!-- Botón de editar/guardar -->
+      <div class="button-row">
+        <!-- Botón de Guardar -->
+        <button
+          *ngIf="showSaveButton"
+          type="button"
+          class="btn btn-save"
+          [disabled]="
+            !isFormDirty ||
+            profileForm.get('aboutMe')?.value === originalData['aboutMe']
+          "
+          (click)="onSubmit()"
+        >
+          Guardar
+        </button>
+
+        <!-- Botón de Editar/Cancelar -->
+        <button
+          type="button"
+          class="btn"
+          [ngClass]="{
+            'btn-edit': !editableFields['aboutMe'],
+            'btn-cancel': editableFields['aboutMe']
+          }"
+          (click)="toggleEdit('aboutMe')"
+        >
+          {{ editableFields["aboutMe"] ? "Cancelar" : "Editar" }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+    --primary-color: #006bcb;
+    --2nd-color: #009087;
+    --danger-color: #ffcabe;
+    --text-color: #333;
+}
+
+body,
+footer {
+    font-family: "Poppins", sans-serif;
+}
+
+/* Estilo para centrar los elementos en un contenedor */
+.display-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.border-red {
+    border: red 1px solid;
+}

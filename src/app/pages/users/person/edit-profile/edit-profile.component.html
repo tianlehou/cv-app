@@ -1,0 +1,17 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>Editar Mi Perfil</h1>
+    <a routerLink="/profile">
+      <app-custom-button label="Regresar"></app-custom-button>
+    </a>
+  </div>
+
+  <!-- Pasar currentUser solo si no es null -->
+  <app-edit-profile-picture *ngIf="currentUser" [currentUser]="currentUser"></app-edit-profile-picture>
+  <app-edit-personal-data *ngIf="currentUser" [currentUser]="currentUser"></app-edit-personal-data>
+  <app-edit-experience *ngIf="currentUser" [currentUser]="currentUser"></app-edit-experience>
+  <app-edit-about-me *ngIf="currentUser" [currentUser]="currentUser"></app-edit-about-me>
+  <app-edit-academic-formation *ngIf="currentUser" [currentUser]="currentUser"></app-edit-academic-formation>
+  <app-edit-languages *ngIf="currentUser" [currentUser]="currentUser"></app-edit-languages>
+  <app-edit-skills *ngIf="currentUser" [currentUser]="currentUser"></app-edit-skills>
+</div>

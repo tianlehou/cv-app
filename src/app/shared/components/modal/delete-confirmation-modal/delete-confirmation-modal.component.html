@@ -1,0 +1,17 @@
+<div
+  class="modal-overlay"
+  *ngIf="isVisible"
+  role="dialog"
+  aria-labelledby="modal-title"
+  aria-describedby="modal-message"
+  (click)="onCancel()"
+>
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2 id="modal-title">{{ title }}</h2>
+    <p id="modal-message">{{ message }}</p>
+    <div class="modal-actions">
+      <button class="btn cancel-btn" (click)="onCancel()">Cancelar</button>
+      <button class="btn confirm-btn" (click)="onConfirm()">Confirmar</button>
+    </div>
+  </div>
+</div>

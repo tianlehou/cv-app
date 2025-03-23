@@ -1,0 +1,100 @@
+/* Contenedor principal */
+.profile-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: #f9f9f9;
+}
+
+/* Grupos de formulario */
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin: 0.5em 0 0 1em;
+  font-weight: 500;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none; /* Evita que el usuario cambie manualmente el tamaño */
+  overflow-y: hidden; /* Oculta el scrollbar vertical */
+}
+
+/* Botones */
+button {
+  padding: 10px;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  background-color: var(--2nd-color);
+  color: white;
+  cursor: pointer;
+}
+
+.button-row {
+  display: flex;
+  justify-content: flex-end; /* Alinea los botones a la derecha */
+  align-items: center;
+  margin-top: 0.5em;
+  gap: 2em;
+}
+
+button {
+  width: 50%; /* El botón ocupa el 50% del ancho de la pantalla */
+}
+
+/* Texto no editable */
+.non-editable-text {
+  white-space: pre-wrap; /* Preserva los saltos de línea y espacios */
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+
+/* Estilo por defecto del botón */
+.btn {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+}
+
+/* Botón en estado Editar */
+.btn-edit {
+  background-color: #009087;
+  color: white;
+}
+
+/* Botón en estado Cancelar */
+.btn-cancel {
+  background-color: #ffcabe;
+  color: black;
+}
+
+/* Botón en estado Guardar */
+.btn-save {
+  background-color: #4caf50;
+  color: white;
+}
+
+
+
+/* Deshabilitar el botón de Guardar */
+.btn-save:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}

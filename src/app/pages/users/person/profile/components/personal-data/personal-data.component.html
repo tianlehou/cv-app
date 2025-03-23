@@ -1,0 +1,16 @@
+<div class="profile-container">
+    <div class="form-group" [formGroup]="profileForm">
+      <label for="fullName">Nombre Completo:</label>
+      <p id="fullName">{{ profileForm.get("fullName")?.value || "No especificado" }}</p>
+
+      <label for="cedula">Cédula:</label>
+      <p id="cedula">{{ profileForm.get("cedula")?.value || "No especificado" }}</p>
+
+      <label for="phone">Teléfono/Celular:</label>
+      <p id="phone">{{ profileForm.get("phone")?.value || "No especificado" }}</p>
+
+      <label for="direction">Dirección:</label>
+      <p id="direction">{{ profileForm.get("direction")?.value || "No especificado" }}</p>
+    </div>
+</div>
+
