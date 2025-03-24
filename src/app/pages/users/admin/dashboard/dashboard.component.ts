@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { get, ref, update } from 'firebase/database';
 import { FirebaseService } from '../../../../services/firebase.service';
-import { PaginationComponent } from './pagination/pagination.component';
+import { PaginationComponent } from '../pagination/pagination.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -71,8 +71,6 @@ export class AdminDashboardComponent implements OnInit {
                             user.fullName?.toLowerCase().includes(this.searchQuery.toLowerCase());
       return matchesType && matchesSearch;
     });
-    console.log('Usuarios filtrados:', this.filteredUsers.length);
-    console.log('Page size:', this.pageSize);
     this.currentPage = 1;
     this.updateStats();
   }

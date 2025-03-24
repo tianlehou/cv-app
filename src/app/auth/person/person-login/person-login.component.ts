@@ -50,6 +50,11 @@ export class PersonLoginComponent {
       this.firebaseService
         .loginWithEmail(email, password)
         .then((user) => {
+          // Actualizar último acceso
+          this.firebaseService.updateUserData(user.email, {
+            lastLogin: new Date().toISOString(),
+          });
+
           this.successMessage = 'Inicio de sesión exitoso';
           setTimeout(() => {
             if (user?.role === 'admin') {

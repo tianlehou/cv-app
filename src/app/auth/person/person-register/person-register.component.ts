@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { FirebaseService } from '../../../services/firebase.service';
 import { Router, RouterModule } from '@angular/router';
 
@@ -20,7 +25,6 @@ export class PersonRegisterComponent {
   emailErrorMessage: string | null = null; // Mensaje de error para el correo
   passwordErrorMessage: string | null = null; // Mensaje de error para la contraseña
   confirmPasswordErrorMessage: string | null = null; // Mensaje de error para la confirmación de contraseña
-
 
   constructor(
     private fb: FormBuilder,
@@ -45,7 +49,8 @@ export class PersonRegisterComponent {
 
   register() {
     if (this.registerForm.valid) {
-      const { fullName, email, password, confirmPassword } = this.registerForm.value;
+      const { fullName, email, password, confirmPassword } =
+        this.registerForm.value;
 
       // Limpiar mensajes anteriores
       this.successMessage = null;
@@ -55,18 +60,19 @@ export class PersonRegisterComponent {
 
       // Validar que las contraseñas coincidan
       if (password !== confirmPassword) {
-        this.confirmPasswordErrorMessage = "La contraseña no coincide.";
+        this.confirmPasswordErrorMessage = 'La contraseña no coincide.';
         return;
       }
 
       this.firebaseService
         .registerWithEmail(email, password)
         .then((userCredential) => {
-          const userData = { 
-            fullName, 
-            email, 
-            role: 'user', // Rol por defecto
-            enabled: true, // Cuenta habilitada por defecto
+          const userData = {
+            fullName,
+            email,
+            role: 'user',
+            enabled: true,
+            createdAt: new Date().toISOString(),
           };
 
           return this.firebaseService.saveUserData(email, userData);
@@ -74,7 +80,7 @@ export class PersonRegisterComponent {
         .then(() => {
           // Mostrar mensaje de éxito
           this.successMessage = 'Usuario registrado con éxito';
-          
+
           // Redirigir después de 3 segundos
           setTimeout(() => {
             this.router.navigate(['/login-person']);
@@ -85,18 +91,22 @@ export class PersonRegisterComponent {
 
           // Mapeo de errores de Firebase
           const errorMessages: { [key: string]: string } = {
-            "auth/email-already-in-use": "¡Este correo ya está en uso!",
-            "auth/invalid-email": "Correo inválido. Verifica que esté bien escrito.",
-            "auth/weak-password": "Contraseña débil. Usa al menos 8 caracteres con letras y números.",
+            'auth/email-already-in-use': '¡Este correo ya está en uso!',
+            'auth/invalid-email':
+              'Correo inválido. Verifica que esté bien escrito.',
+            'auth/weak-password':
+              'Contraseña débil. Usa al menos 8 caracteres con letras y números.',
           };
 
           // Obtener el mensaje de error específico o uno genérico
-          const message = errorMessages[error.code as keyof typeof errorMessages] || "¡Ocurrió un error inesperado!";
+          const message =
+            errorMessages[error.code as keyof typeof errorMessages] ||
+            '¡Ocurrió un error inesperado!';
 
           // Asignar el mensaje de error al campo correspondiente
-          if (error.code === "auth/invalid-email") {
+          if (error.code === 'auth/invalid-email') {
             this.emailErrorMessage = message;
-          } else if (error.code === "auth/weak-password") {
+          } else if (error.code === 'auth/weak-password') {
             this.passwordErrorMessage = message;
           } else {
             this.errorMessage = message; // Mensaje genérico para otros errores

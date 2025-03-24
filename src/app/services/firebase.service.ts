@@ -106,6 +106,7 @@ export class FirebaseService {
       email: string;
       enabled: boolean;
       role: string;
+      lastLogin?: string;
       profileData: {
         phone?: string;
         cedula?: string;
