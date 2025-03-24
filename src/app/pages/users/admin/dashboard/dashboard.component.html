@@ -41,10 +41,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let user of filteredUsers">
+                <tr *ngFor="let user of paginatedUsers">
                     <td>{{ user.fullName || 'N/A' }}</td>
                     <td>{{ user.email }}</td>
-                    <td>{{ user.role === 'user' ? 'Candidato' : 'Empresa' }}</td>
+                    <td>
+                        {{ user.role === 'user' ? 'Candidato' :
+                           user.role === 'company' ? 'Empresa' :
+                           user.role === 'admin' ? 'Administrador' : 'Desconocido' }}
+                    </td>
                     <td>{{ formatDate(user.createdAt) }}</td>
                     <td>{{ formatDate(user.lastLogin) }}</td>
                     <td>
@@ -60,5 +64,12 @@
                 </tr>
             </tbody>
         </table>
+        
+        <app-pagination 
+          [currentPage]="currentPage"
+          [totalItems]="filteredUsers.length"
+          [pageSize]="pageSize"
+          (pageChange)="onPageChange($event)"
+        ></app-pagination>
     </div>
 </div>

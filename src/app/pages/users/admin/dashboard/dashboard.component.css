@@ -106,3 +106,10 @@ button:hover {
         overflow-x: auto;
     }
 }
+
+.user-table {
+    /* ... (propiedades existentes) ... */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserTypeModalComponent } from '../../../../shared/components/modal/user-type-modal/user-type-modal.component';
+import { UserTypeModalComponent } from '../../user-type-modal/user-type-modal.component';
 
 @Component({
   selector: 'app-call-to-action',

@@ -4,15 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { get, ref, update } from 'firebase/database';
 import { FirebaseService } from '../../../../services/firebase.service';
+import { PaginationComponent } from './pagination/pagination.component';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxChartsModule],
+  imports: [CommonModule, FormsModule, NgxChartsModule, PaginationComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-
 export class AdminDashboardComponent implements OnInit {
   users: any[] = [];
   filteredUsers: any[] = [];
@@ -23,6 +23,10 @@ export class AdminDashboardComponent implements OnInit {
   totalUsers: number = 0;
   totalCandidates: number = 0;
   totalCompanies: number = 0;
+  
+  // Paginación
+  currentPage: number = 1;
+  pageSize: number = 5;
 
   // Gráfico
   view: [number, number] = [700, 400];
@@ -67,6 +71,9 @@ export class AdminDashboardComponent implements OnInit {
                             user.fullName?.toLowerCase().includes(this.searchQuery.toLowerCase());
       return matchesType && matchesSearch;
     });
+    console.log('Usuarios filtrados:', this.filteredUsers.length);
+    console.log('Page size:', this.pageSize);
+    this.currentPage = 1;
     this.updateStats();
   }
 
@@ -88,5 +95,15 @@ export class AdminDashboardComponent implements OnInit {
       hour: '2-digit',
       minute: '2-digit'
     }) : 'Nunca';
+  }
+
+  // Métodos de paginación
+  onPageChange(page: number): void {
+    this.currentPage = page;
+  }
+
+  get paginatedUsers(): any[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.filteredUsers.slice(startIndex, startIndex + this.pageSize);
   }
 }
