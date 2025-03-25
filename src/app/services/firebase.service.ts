@@ -7,7 +7,6 @@ import {
   signInWithEmailAndPassword,
 } from '@angular/fire/auth';
 import { Database, ref, set, get, update } from '@angular/fire/database';
-import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -16,7 +15,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class FirebaseService {
   private auth = inject(Auth);
   private db = inject(Database);
-  private router = inject(Router);
   private authState = new BehaviorSubject<boolean>(false);
   private injector = inject(EnvironmentInjector);
 

@@ -2,7 +2,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Auth, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
-import { FirebaseService } from '../../services/firebase.service';
+import { FirebaseService } from '../../../services/firebase.service';
 
 @Component({
   selector: 'app-google-login',
@@ -96,6 +96,9 @@ export class GoogleLoginComponent {
       }
 
       await this.router.navigate(['/profile']);
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
       this.loginSuccess.emit();
     } catch (error: any) {
       console.error('Error Google auth:', error);

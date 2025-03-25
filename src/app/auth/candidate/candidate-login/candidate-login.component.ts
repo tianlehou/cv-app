@@ -8,16 +8,16 @@ import {
 } from '@angular/forms';
 import { FirebaseService } from '../../../services/firebase.service';
 import { RouterModule, Router } from '@angular/router';
-import { GoogleLoginComponent } from '../../google-login-button/google-login.component';
+import { GoogleLoginComponent } from '../google-login-button/google-login.component';
 
 @Component({
-  selector: 'app-person-login',
+  selector: 'app-candidate-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, GoogleLoginComponent],
-  templateUrl: './person-login.component.html',
-  styleUrls: ['./person-login.component.css'],
+  templateUrl: './candidate-login.component.html',
+  styleUrls: ['./candidate-login.component.css'],
 })
-export class PersonLoginComponent {
+export class CandidateLoginComponent {
   loginForm: FormGroup;
   showPassword = false;
   successMessage: string | null = null; // Mensaje de éxito

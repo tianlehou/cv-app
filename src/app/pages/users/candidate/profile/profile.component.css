@@ -1,11 +1,11 @@
 .profile-container {
   max-width: 600px;
   margin: auto;
+  margin-top: 4.5em;
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 10px;
   background: #f9f9f9;
-  text-align: center; /* Centrar el contenido del contenedor */
+  text-align: center;
 }
 
 .profile-header {

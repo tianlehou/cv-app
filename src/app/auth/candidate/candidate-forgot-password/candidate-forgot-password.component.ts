@@ -5,13 +5,13 @@ import { RouterModule } from '@angular/router';
 import { FirebaseService } from '../../../services/firebase.service';
 
 @Component({
-  selector: 'app-forgot-password',
+  selector: 'app-candidate-forgot-password',
   standalone: true, // Indica que el componente es standalone
   imports: [CommonModule, ReactiveFormsModule, RouterModule], // Importa los módulos necesarios
-  templateUrl: './person-forgot-password.component.html',
-  styleUrls: ['./person-forgot-password.component.css'],
+  templateUrl: './candidate-forgot-password.component.html',
+  styleUrls: ['./candidate-forgot-password.component.css'],
 })
-export class PersonForgotPasswordComponent {
+export class CandidateForgotPasswordComponent {
   forgotPasswordForm: FormGroup;
 
   constructor(private fb: FormBuilder, private firebaseService: FirebaseService) {

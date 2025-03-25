@@ -3,9 +3,9 @@ import { AuthGuard } from './auth.guard';
 import { HomeComponent } from './pages/home/home.component';
 
 // Auth Section
-import { PersonRegisterComponent } from './auth/person/person-register/person-register.component';
-import { PersonLoginComponent } from './auth/person/person-login/person-login.component';
-import { PersonForgotPasswordComponent } from './auth/person/person-forgot-password/person-forgot-password.component';
+import { CandidateRegisterComponent } from './auth/candidate/candidate-register/candidate-register.component';
+import { CandidateLoginComponent } from './auth/candidate/candidate-login/candidate-login.component';
+import { CandidateForgotPasswordComponent } from './auth/candidate/candidate-forgot-password/candidate-forgot-password.component';
 import { CompanyRegisterComponent } from './auth/company/company-register/company-register.component';
 import { CompanyLoginComponent } from './auth/company/company-login/company-login.component';
 import { CompanyForgotPasswordComponent } from './auth/company/company-forgot-password/company-forgot-password.component';
@@ -16,8 +16,8 @@ import { MainComponent } from './pages/users/admin/main.component';
 // Company Section
 
 // Person Section
-import { ProfileComponent } from './pages/users/person/profile/profile.component';
-import { EditProfileComponent } from './pages/users/person/edit-profile/edit-profile.component';
+import { ProfileComponent } from './pages/users/candidate/profile/profile.component';
+import { EditProfileComponent } from './pages/users/candidate/edit-profile/edit-profile.component';
 
 // Others Section
 import { SubscriptionComponent } from './pages/subscription/subscription.component';
@@ -27,9 +27,9 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
 
   // Auth Section
-  { path: 'person-register', component: PersonRegisterComponent },
-  { path: 'person-login', component: PersonLoginComponent },
-  { path: 'person-forgot-password', component: PersonForgotPasswordComponent },
+  { path: 'candidate-register', component: CandidateRegisterComponent },
+  { path: 'candidate-login', component: CandidateLoginComponent },
+  { path: 'candidate-forgot-password', component: CandidateForgotPasswordComponent },
   { path: 'company-register', component: CompanyRegisterComponent },
   { path: 'company-login', component: CompanyLoginComponent },
   { path: 'company-forgot-password', component: CompanyForgotPasswordComponent },

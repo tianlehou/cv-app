@@ -20,10 +20,7 @@ bootstrapApplication(AppComponent, {
       const app = initializeApp(environment.firebaseConfig);
       return app;
     }),
-    provideAuth(() => {
-      const auth = getAuth();
-      return auth;
-    }),
+    provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
     provideDatabase(() => getDatabase()),

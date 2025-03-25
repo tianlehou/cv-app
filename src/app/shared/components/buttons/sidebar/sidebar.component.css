@@ -47,10 +47,6 @@
   font-size: 18px;
 }
 
-.sidebar-menu nav ul li a:hover {
-  text-decoration: underline;
-}
-
 /* Ícono de cierre */
 .close-icon {
   color: white;
