@@ -8,11 +8,12 @@ import {
 } from '@angular/forms';
 import { FirebaseService } from '../../../services/firebase.service';
 import { RouterModule, Router } from '@angular/router';
+import { GoogleLoginComponent } from '../../google-login-button/google-login.component';
 
 @Component({
   selector: 'app-person-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, GoogleLoginComponent],
   templateUrl: './person-login.component.html',
   styleUrls: ['./person-login.component.css'],
 })
@@ -94,5 +95,16 @@ export class PersonLoginComponent {
           }
         });
     }
+  }
+
+  handleGoogleSuccess() {
+    this.successMessage = 'Autenticación con Google exitosa';
+    setTimeout(() => {
+      this.router.navigate(['/profile']);
+    }, 2000);
+  }
+
+  handleGoogleError(message: string) {
+    this.emailErrorMessage = message;
   }
 }
