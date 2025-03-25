@@ -32,7 +32,7 @@ export class FirebaseService {
     });
   }
 
-  private formatEmailKey(email: string): string {
+  public formatEmailKey(email: string): string {
     return email.replace(/\./g, '_');
   }
 

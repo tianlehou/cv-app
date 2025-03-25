@@ -50,7 +50,7 @@ export class GoogleLoginComponent {
   constructor(
     private auth: Auth,
     private router: Router,
-    private firebaseService: FirebaseService,
+    private firebaseService: FirebaseService
   ) {}
 
   async signInWithGoogle() {
@@ -72,18 +72,31 @@ export class GoogleLoginComponent {
         return;
       }
 
-      const userData = {
-        fullName: user.displayName || 'Usuario Google',
-        email: user.email,
-        role: 'user',
-        enabled: true,
-        createdAt: new Date().toISOString(),
-        lastLogin: new Date().toISOString(),
-        profileData: {},
-      };
+      const userEmailKey = this.firebaseService.formatEmailKey(user.email);
+      const existingUser = await this.firebaseService.getUserData(userEmailKey);
+      const currentDate = new Date().toISOString();
 
-      await this.firebaseService.saveUserData(user.email, userData);
+      if (existingUser) {
+        // Actualizar solo lastLogin
+        await this.firebaseService.updateUserData(user.email, {
+          lastLogin: currentDate,
+        });
+      } else {
+        // Crear nuevo usuario con createdAt y lastLogin
+        const userData = {
+          fullName: user.displayName || 'Usuario Google',
+          email: user.email,
+          role: 'user',
+          enabled: true,
+          createdAt: currentDate,
+          lastLogin: currentDate,
+          profileData: {},
+        };
+        await this.firebaseService.saveUserData(user.email, userData);
+      }
+
       await this.router.navigate(['/profile']);
+      this.loginSuccess.emit();
     } catch (error: any) {
       console.error('Error Google auth:', error);
       this.loginError.emit(
