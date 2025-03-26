@@ -1,20 +1,21 @@
 <div class="profile-container">
-    <div class="form-group" [formGroup]="profileForm">
-      <label for="fullName">Nombre Completo:</label>
+  <div class="form-group" [formGroup]="profileForm">
       <p id="fullName">{{ profileForm.get("fullName")?.value || "No especificado" }}</p>
-
-      <label for="profesion">Profesión:</label>
       <p id="profesion">{{ profileForm.get("profesion")?.value || "No especificado" }}</p>
 
-      <label for="phone">Teléfono/Celular:</label>
+    <div class="icon-field">
+      <i class="fas fa-phone"></i>
       <p id="phone">{{ profileForm.get("phone")?.value || "No especificado" }}</p>
+    </div>
 
-      <label for="editableEmail">Corre Electrónico:</label>
+    <div class="icon-field">
+      <i class="fas fa-envelope"></i>
       <p id="editableEmail">{{ profileForm.get("editableEmail")?.value || "No especificado" }}</p>
+    </div>
 
-
-      <label for="direction">Dirección:</label>
+    <div class="icon-field">
+      <i class="fas fa-map-marker-alt"></i>
       <p id="direction">{{ profileForm.get("direction")?.value || "No especificado" }}</p>
     </div>
+  </div>
 </div>
-

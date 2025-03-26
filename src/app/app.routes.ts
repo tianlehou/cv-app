@@ -18,6 +18,7 @@ import { MainComponent } from './pages/users/admin/main.component';
 // Person Section
 import { ProfileComponent } from './pages/users/candidate/profile/profile.component';
 import { EditProfileComponent } from './pages/users/candidate/edit-profile/edit-profile.component';
+import { PrincipalComponent } from './pages/users/candidate/principal/principal.component';
 
 // Others Section
 import { SubscriptionComponent } from './pages/subscription/subscription.component';
@@ -40,7 +41,8 @@ export const routes: Routes = [
   // Person Section
   { path: 'profile', component: ProfileComponent, canMatch: [AuthGuard], data: {role: 'user'}},
   { path: 'edit-profile', component: EditProfileComponent, canMatch: [AuthGuard], data: {role: 'user'}},
- 
+  { path: 'principal', component: PrincipalComponent, canMatch: [AuthGuard], data: {role: 'user'}},
+
   // Others Section
   { path: 'suscripciones', component: SubscriptionComponent },
   { path: '**', redirectTo: 'home' },

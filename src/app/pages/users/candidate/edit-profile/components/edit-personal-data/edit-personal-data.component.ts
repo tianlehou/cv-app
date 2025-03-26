@@ -34,17 +34,28 @@ export class EditPersonalDataComponent implements OnInit {
   private initializeForm(): void {
     this.profileForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3)]],
-      cedula: ['', [Validators.required]],
-      phone: ['', Validators.pattern('^\\+?[1-9]\\d{1,14}$')],
+      profesion: ['', [Validators.required]],
+      phone: ['', [Validators.pattern(/^\d{4}-\d{4}$/)]],
+      editableEmail: ['', [Validators.required, Validators.email]],
       direction: [''],
     });
+  }
+
+  formatPhoneNumber(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/-/g, '');
+    if (value.length > 4) {
+      value = value.slice(0, 4) + '-' + value.slice(4, 8);
+    }
+    input.value = value;
   }
 
   private setEditableFields(): void {
     this.editableFields = {
       fullName: false,
-      cedula: false,
+      profesion: false,
       phone: false,
+      editableEmail: false,
       direction: false,
     };
   }
@@ -56,8 +67,9 @@ export class EditPersonalDataComponent implements OnInit {
       const userData = await this.firebaseService.getUserData(this.userEmail);
       this.profileForm.patchValue({
         fullName: userData?.fullName || '',
-        cedula: userData?.profileData?.personalData?.cedula || '',
+        profesion: userData?.profileData?.personalData?.profesion || '',
         phone: userData?.profileData?.personalData?.phone || '',
+        editableEmail: userData?.profileData?.personalData?.editableEmail || '',
         direction: userData?.profileData?.personalData?.direction || '',
       });
     } catch (error) {
@@ -84,8 +96,9 @@ export class EditPersonalDataComponent implements OnInit {
         profileData: {
           ...userData?.profileData,
           personalData: {
-            cedula: this.profileForm.value.cedula,
+            profesion: this.profileForm.value.profesion,
             phone: this.profileForm.value.phone,
+            editableEmail: this.profileForm.value.editableEmail,
             direction: this.profileForm.value.direction,
           }
         }

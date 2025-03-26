@@ -1,0 +1,13 @@
+<app-sidebar></app-sidebar>
+<div class="profile-container">
+  <div class="profile-header">
+    <a routerLink="/edit-profile">
+      <app-custom-button label="Editar"></app-custom-button>
+    </a>
+  </div>
+
+  <div class="profile-components-row">
+    <app-profile-picture *ngIf="currentUser" [currentUser]="currentUser"></app-profile-picture>
+    <app-personal-data *ngIf="currentUser" [currentUser]="currentUser"></app-personal-data>
+  </div>
+</div>

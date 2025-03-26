@@ -20,21 +20,21 @@
       </div>
     </div>
 
-    <!-- Cédula -->
+    <!-- Profesión -->
     <div class="form-group">
-      <label for="cedula">Cédula:</label>
+      <label for="profesion">Profesión:</label>
       <div class="input-group">
-        <input id="cedula" formControlName="cedula" type="text" class="form-control"
-          [readonly]="!editableFields['cedula']" />
-        <button type="button" class="btn btn-secondary" (click)="toggleEdit('cedula')">
-          {{ editableFields["cedula"] ? "Guardar" : "Editar" }}
+        <input id="profesion" formControlName="profesion" type="text" class="form-control"
+          [readonly]="!editableFields['profesion']" />
+        <button type="button" class="btn btn-secondary" (click)="toggleEdit('profesion')">
+          {{ editableFields["profesion"] ? "Guardar" : "Editar" }}
         </button>
       </div>
       <div *ngIf="
-          profileForm.get('cedula')?.invalid &&
-          profileForm.get('cedula')?.touched
+          profileForm.get('profesion')?.invalid &&
+          profileForm.get('profesion')?.touched
         " class="text-danger">
-        La cédula es obligatoria.
+        La profesión es obligatoria.
       </div>
     </div>
 
@@ -42,17 +42,31 @@
     <div class="form-group">
       <label for="phone">Teléfono:</label>
       <div class="input-group">
-        <input id="phone" formControlName="phone" type="tel" class="form-control"
-          [readonly]="!editableFields['phone']" />
+        <input id="phone" formControlName="phone" type="tel" class="form-control" [readonly]="!editableFields['phone']"
+          (input)="formatPhoneNumber($event)" maxlength="9" placeholder="Ej: 6123-1234" />
         <button type="button" class="btn btn-secondary" (click)="toggleEdit('phone')">
           {{ editableFields["phone"] ? "Guardar" : "Editar" }}
         </button>
       </div>
       <div *ngIf="
-          profileForm.get('phone')?.invalid &&
-          profileForm.get('phone')?.touched
+          profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched
         " class="text-danger">
         Introduce un número de teléfono válido.
+      </div>
+    </div>
+
+    <!-- Correo -->
+    <div class="form-group">
+      <label for="editableEmail">Correo electrónico:</label>
+      <div class="input-group">
+        <input id="editableEmail" formControlName="editableEmail" type="email" class="form-control"
+          [readonly]="!editableFields['editableEmail']" />
+        <button type="button" class="btn btn-secondary" (click)="toggleEdit('editableEmail')">
+          {{ editableFields["editableEmail"] ? "Guardar" : "Editar" }}
+        </button>
+      </div>
+      <div *ngIf="profileForm.get('editableEmail')?.invalid && profileForm.get('editableEmail')?.touched" class="text-danger">
+        Introduce un correo electrónico válido
       </div>
     </div>
 
@@ -67,6 +81,5 @@
         </button>
       </div>
     </div>
-
   </form>
 </div>

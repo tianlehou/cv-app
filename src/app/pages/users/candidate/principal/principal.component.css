@@ -1,0 +1,53 @@
+.profile-container {
+  max-width: 800px;
+  margin: auto;
+  margin-top: 4.5em;
+  padding: 20px;
+  border: 1px solid #ccc;
+  /* background: #f9f9f9; */
+  text-align: center;
+}
+
+app-custom-button {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  z-index: 1000;
+}
+
+.profile-components-row {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  width: 100%;
+}
+
+/* Responsive para tablet */
+@media (max-width: 768px) {
+  .profile-container {
+    margin-top: 3em;
+    padding: 15px;
+  }
+  
+  .profile-components-row {
+    gap: 15px;
+  }
+}
+
+/* Responsive para móvil */
+@media (max-width: 480px) {
+  .profile-container {
+    margin-top: 2em;
+    padding: 10px;
+  }
+  
+  .profile-components-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  app-profile-picture {
+    width: 150px;
+    height: 150px;
+  }
+}
