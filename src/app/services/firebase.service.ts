@@ -1,4 +1,9 @@
-import { Injectable, inject, runInInjectionContext, EnvironmentInjector } from '@angular/core';
+import {
+  Injectable,
+  inject,
+  runInInjectionContext,
+  EnvironmentInjector,
+} from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
@@ -35,7 +40,7 @@ export class FirebaseService {
   }
 
   registerWithEmail(email: string, password: string) {
-    return runInInjectionContext(this.injector, () => 
+    return runInInjectionContext(this.injector, () =>
       createUserWithEmailAndPassword(this.auth, email, password)
     );
   }
@@ -48,7 +53,7 @@ export class FirebaseService {
   }
 
   sendPasswordResetEmail(email: string) {
-    return runInInjectionContext(this.injector, () => 
+    return runInInjectionContext(this.injector, () =>
       sendPasswordResetEmail(this.auth, email)
     );
   }
@@ -71,9 +76,11 @@ export class FirebaseService {
       if (user?.email) {
         const userEmailKey = this.formatEmailKey(user.email);
         const userRef = ref(this.db, `cv-app/users/${userEmailKey}`);
-        
+
         // Corrección clave para línea 81
-        const snapshot = await runInInjectionContext(this.injector, () => get(userRef));
+        const snapshot = await runInInjectionContext(this.injector, () =>
+          get(userRef)
+        );
         return snapshot.exists() ? snapshot.val() : null;
       }
       return null;
@@ -88,7 +95,9 @@ export class FirebaseService {
     return runInInjectionContext(this.injector, async () => {
       const userRef = ref(this.db, `cv-app/users/${emailKey}`);
       try {
-        const snapshot = await runInInjectionContext(this.injector, () => get(userRef));
+        const snapshot = await runInInjectionContext(this.injector, () =>
+          get(userRef)
+        );
         return snapshot.exists() ? snapshot.val() : null;
       } catch (error) {
         console.error('Error al obtener datos:', error);
@@ -100,19 +109,31 @@ export class FirebaseService {
   async updateUserData(
     originalEmail: string,
     data: Partial<{
-      fullName: string;
+      createdAt: string;
       email: string;
       enabled: boolean;
-      role: string;
+      fullName: string;
       lastLogin?: string;
+      lastUpdated?: string;
       profileData: {
-        phone?: string;
-        cedula?: string;
         direction?: string;
-        profilePicture?: string;
-        experience?: string;
+        editableEmail?: string;
+        phone?: string;
+        profesion?: string;
+
         aboutMe?: string;
+        academicFormation?: string;
+        experience?: string;
+        languages?: string;
+        multimedia?: {
+          picture?: {
+            profilePicture?: string;
+          };
+        };
+        personalData?: string;
+        skills?: string;
       };
+      role: string;
     }>
   ): Promise<void> {
     return runInInjectionContext(this.injector, async () => {

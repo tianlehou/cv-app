@@ -170,3 +170,7 @@ input#phone {
 input[type="email"] {
   text-transform: lowercase;
 }
+
+.invalid-field {
+  border: 1px solid #e74c3c !important;
+}

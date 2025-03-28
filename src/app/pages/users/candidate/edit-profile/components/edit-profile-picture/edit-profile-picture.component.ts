@@ -13,7 +13,7 @@ import {
   uploadBytes,
   getDownloadURL,
   deleteObject,
-} from '@angular/fire/storage'; // Añadir deleteObject
+} from '@angular/fire/storage';
 import { FirebaseService } from '../../../../../../services/firebase.service';
 import { User } from '@angular/fire/auth';
 
@@ -65,16 +65,11 @@ export class EditProfilePictureComponent implements OnInit, OnChanges {
     if (!this.userEmailKey) return;
 
     try {
-      const userData = await this.firebaseService.getUserData(
-        this.userEmailKey
-      );
+      const userData = await this.firebaseService.getUserData(this.userEmailKey);
 
-      // Verificar si hay URL de imagen válida
-      if (userData?.profileData?.profilePicture) {
-        // Forzar recarga de la imagen
+      if (userData?.profileData?.multimedia?.picture?.profilePicture) {
         const timestamp = new Date().getTime();
-        const imageUrl = `${userData.profileData.profilePicture}?${timestamp}`;
-
+        const imageUrl = `${userData.profileData.multimedia.picture.profilePicture}?${timestamp}`;
         this.profileForm.patchValue({ profilePicture: imageUrl });
       } else {
         this.profileForm.patchValue({ profilePicture: '' });
@@ -110,10 +105,10 @@ export class EditProfilePictureComponent implements OnInit, OnChanges {
     }
 
     try {
-      const PROFILE_PIC_NAME = "profile-picture.jpg"; // Nombre fijo para la imagen
+      const PROFILE_PIC_NAME = 'profile-picture.jpg';
       const storageRef = ref(
         this.storage,
-        `cv-app/users/profile-pictures/${this.userEmailKey}/${PROFILE_PIC_NAME}`
+        `cv-app/users/${this.userEmailKey}/profile-pictures/${PROFILE_PIC_NAME}`
       );
 
       // 1. Eliminar la imagen anterior si existe
@@ -128,15 +123,28 @@ export class EditProfilePictureComponent implements OnInit, OnChanges {
       await uploadBytes(storageRef, this.selectedFile);
       const downloadURL = await getDownloadURL(storageRef);
 
-      // 3. Actualizar la URL en la base de datos
-      await this.firebaseService.updateUserData(this.currentUser.email, {
+      // 3. Obtener datos actuales del usuario
+      const userData = await this.firebaseService.getUserData(this.userEmailKey);
+      
+      // 4. Crear objeto actualizado manteniendo todos los datos existentes
+      const updatedData = {
         profileData: {
-          profilePicture: downloadURL,
-        },
-      });
+          ...userData?.profileData || {}, // Mantener todos los datos existentes
+          multimedia: {
+            ...userData?.profileData?.multimedia || {},
+            picture: {
+              ...userData?.profileData?.multimedia?.picture || {},
+              profilePicture: downloadURL // Solo actualizar este campo
+            }
+          }
+        }
+      };
+
+      // 5. Actualizar en Firebase
+      await this.firebaseService.updateUserData(this.currentUser.email, updatedData);
 
       alert('¡Foto actualizada correctamente!');
-      await this.loadUserData(); // Recargar la imagen en la vista
+      await this.loadUserData();
     } catch (error) {
       console.error('Error:', error);
       alert(

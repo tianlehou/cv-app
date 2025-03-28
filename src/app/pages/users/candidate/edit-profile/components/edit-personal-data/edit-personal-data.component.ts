@@ -14,7 +14,6 @@ import { User } from '@angular/fire/auth';
 export class EditPersonalDataComponent implements OnInit {
   @Input() currentUser: User | null = null;
   profileForm!: FormGroup;
-  userEmail: string | null = null;
   editableFields: { [key: string]: boolean } = {};
 
   constructor(
@@ -26,9 +25,12 @@ export class EditPersonalDataComponent implements OnInit {
     this.initializeForm();
     this.setEditableFields();
     if (this.currentUser) {
-      this.userEmail = this.currentUser.email?.replaceAll('.', '_') || null;
       this.loadUserData();
     }
+  }
+
+  private formatEmailKey(email: string): string {
+    return email.replace(/\./g, '_');
   }
 
   private initializeForm(): void {
@@ -61,10 +63,12 @@ export class EditPersonalDataComponent implements OnInit {
   }
 
   private async loadUserData(): Promise<void> {
-    if (!this.userEmail) return;
+    if (!this.currentUser?.email) return;
 
     try {
-      const userData = await this.firebaseService.getUserData(this.userEmail);
+      const userEmailKey = this.formatEmailKey(this.currentUser.email);
+      const userData = await this.firebaseService.getUserData(userEmailKey);
+      
       this.profileForm.patchValue({
         fullName: userData?.fullName || '',
         profesion: userData?.profileData?.personalData?.profesion || '',
@@ -79,36 +83,66 @@ export class EditPersonalDataComponent implements OnInit {
 
   toggleEdit(field: string): void {
     this.editableFields[field] = !this.editableFields[field];
-    if (!this.editableFields[field]) this.onSubmit();
+    
+    if (!this.editableFields[field]) {
+      // Validar solo el campo actual antes de guardar
+      const control = this.profileForm.get(field);
+      if (control?.invalid) {
+        alert(`Por favor complete el campo ${field} correctamente.`);
+        this.editableFields[field] = true; // Mantener en modo edición
+        return;
+      }
+      this.onSubmit(field); // Pasar el campo específico a onSubmit
+    }
   }
 
-  async onSubmit(): Promise<void> {
-    if (!this.profileForm.valid || !this.userEmail) {
-      alert('Error en los datos o usuario no autenticado.');
+  async onSubmit(field?: string): Promise<void> {
+    if (!this.currentUser?.email) {
+      alert('Usuario no autenticado.');
       return;
     }
-
+  
     try {
-      const userData = await this.firebaseService.getUserData(this.userEmail);
-      const updatedData = {
-        ...userData,
-        fullName: this.profileForm.value.fullName,
+      const userEmailKey = this.formatEmailKey(this.currentUser.email);
+      const userData = await this.firebaseService.getUserData(userEmailKey);
+      
+      // Actualizar solo los datos necesarios
+      const updatedData: any = {
         profileData: {
           ...userData?.profileData,
           personalData: {
-            profesion: this.profileForm.value.profesion,
-            phone: this.profileForm.value.phone,
-            editableEmail: this.profileForm.value.editableEmail,
-            direction: this.profileForm.value.direction,
+            ...userData?.profileData?.personalData
           }
         }
       };
-
-      await this.firebaseService.updateUserData(this.userEmail, updatedData);
-      alert('Datos actualizados exitosamente!');
+  
+      // Si es un campo específico, actualizar solo ese campo
+      if (field) {
+        if (field === 'fullName') {
+          updatedData.fullName = this.profileForm.value.fullName;
+        } else {
+          updatedData.profileData.personalData[field] = this.profileForm.value[field];
+        }
+      } else {
+        // Actualizar todos los campos (para cuando se necesite)
+        updatedData.fullName = this.profileForm.value.fullName;
+        updatedData.profileData.personalData = {
+          ...updatedData.profileData.personalData,
+          ...this.profileForm.value
+        };
+      }
+  
+      await this.firebaseService.updateUserData(this.currentUser.email, updatedData);
+      
+      if (field) {
+        alert(`Campo ${field} actualizado exitosamente!`);
+      } else {
+        alert('Datos actualizados exitosamente!');
+      }
+      
       await this.loadUserData();
     } catch (error) {
-      console.error('Update error:', error);
+      console.error('Error:', error);
       alert('Error al guardar los datos');
     }
   }

@@ -25,7 +25,7 @@ export class ProfilePictureComponent {
   private async loadUserData(userEmailKey: string): Promise<void> {
     try {
       const userData = await this.firebaseService.getUserData(userEmailKey);
-      this.profilePictureUrl = userData?.profileData?.profilePicture || null;
+      this.profilePictureUrl = userData?.profileData?.multimedia?.picture?.profilePicture || null;
     } catch (error) {
       console.error('Error cargando datos:', error);
       alert('No se pudo cargar la imagen actual');

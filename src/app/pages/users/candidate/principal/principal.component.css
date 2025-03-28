@@ -1,10 +1,19 @@
+.profile-header {
+  height: 3em;
+  display: flex;
+  align-items: center;
+}
+
+.profile-header button {
+  position: absolute;
+  right: 10px;
+  background-color: white;
+}
+
 .profile-container {
   max-width: 800px;
   margin: auto;
-  margin-top: 4.5em;
-  padding: 20px;
   border: 1px solid #ccc;
-  /* background: #f9f9f9; */
   text-align: center;
 }
 
@@ -24,11 +33,6 @@ app-custom-button {
 
 /* Responsive para tablet */
 @media (max-width: 768px) {
-  .profile-container {
-    margin-top: 3em;
-    padding: 15px;
-  }
-  
   .profile-components-row {
     gap: 15px;
   }
@@ -36,16 +40,10 @@ app-custom-button {
 
 /* Responsive para móvil */
 @media (max-width: 480px) {
-  .profile-container {
-    margin-top: 2em;
-    padding: 10px;
-  }
-  
   .profile-components-row {
     flex-direction: column;
-    gap: 10px;
   }
-  
+
   app-profile-picture {
     width: 150px;
     height: 150px;

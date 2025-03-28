@@ -3,7 +3,7 @@
   max-width: 200px;
   height: auto;
   aspect-ratio: 1/1;
-  padding: 0;
+  padding-left: 10px;
   position: relative;
   margin: 0 auto;
 }
@@ -21,5 +21,6 @@
 @media (max-width: 480px) {
   .profile-container {
     max-width: 150px;
+    padding: 0;
   }
 }
