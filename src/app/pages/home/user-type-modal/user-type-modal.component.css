@@ -1,83 +1,85 @@
 /* Modal Container */
 .modal-content {
-    background-color: #f8f9fa; /* Suave color de fondo */
-    border-radius: 12px; /* Bordes redondeados */
-    border: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-    color: #333; /* Color de texto */
-  }
-  
-  /* Modal Header */
-  .modal-header {
-    background-color: #f1f6f3; /* Fondo gris claro */
-    border-bottom: none; /* Sin borde */
-    border-radius: 12px 12px 0 0; /* Bordes redondeados superiores */
-    padding: 1rem 1.5rem;
-    text-align: center;
-  }
-  
-  .modal-title {
-    font-size: 1.25rem; /* Tamaño de texto moderado */
-    font-weight: 600;
-    color: #495057; /* Texto gris oscuro */
-  }
-  
-  /* Close Button */
-  .btn-close {
-    background-color: transparent;
-    border: none;
-    color: #6c757d; /* Gris claro */
-    font-size: 1.2rem;
-    opacity: 0.8;
-  }
-  
-  .btn-close:hover {
-    opacity: 1;
-  }
-  
-  /* Modal Body */
-  .modal-body {
-    padding: 1.5rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #495057; /* Texto gris oscuro */
-  }
-  
-  /* Buttons */
-  .modal-body .btn {
-    padding: 0.8rem;
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: 8px;
-    border: 1px solid #ced4da; /* Bordes suaves */
-    text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-  }
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Sombra sutil */
+  color: #333;
+  /* Color de texto */
+}
+
+/* Modal Header */
+.modal-header {
+  background-color: #f1f6f3;
+  /* Fondo gris claro */
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding: 1rem 1.5rem;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.btn-close {
+  background-color: transparent;
+  border: none;
+  color: #6c757d;
+  font-size: 1.2rem;
+  opacity: 0.5;
+}
+
+.btn-close:hover {
+  opacity: 1;
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+}
+
+/* Buttons */
+.modal-body .btn {
+  padding: 0.8rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  border-radius: 50px;
+  border: 1px solid #ced4da;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
 
 .modal-body .person-btn {
-    color: #f1f6f3;
-    background-color: #78ab92; /* Fondo blanco */
+  color: #f1f6f3;
+  background-color: var(--clr-green);
 }
 
 .modal-body .company-btn {
-    color: #78ab92;
-    background-color: #f1f6f3; /* Fondo blanco */
+  color: var(--clr-green);
+  background-color: #f1f6f3;
 }
-  
-  /* Primary Button */
-  .modal-body .btn:hover {
-    background-color: #e2e6ea; /* Gris claro */
-    color: #212529; /* Texto más oscuro */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-  }
-  
-  /* Button Layout */
-  .d-grid {
-    row-gap: 1rem;
-  }
-  
-  /* Overlay */
-  .modal-backdrop {
-    background-color: rgba(0, 0, 0, 0.4) !important; /* Fondo oscuro pero no opaco */
-  }
-  
+
+/* Primary Button */
+.modal-body .btn:hover {
+  background-color: #e2e6ea;
+  color: #212529;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--clr-green);
+}
+
+/* Button Layout */
+.d-grid {
+  row-gap: 1rem;
+}
+
+/* Overlay */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}

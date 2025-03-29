@@ -1,11 +1,11 @@
 .profile-container {
   width: 100%;
   height: auto;
-  padding: 15px;
+  padding: 0 20px;
 }
 
 #fullName {
-  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
   font-weight: 500;
 }
 
@@ -38,10 +38,6 @@
 
 /* Tablet */
 @media (max-width: 768px) {
-  .profile-container {
-    padding: 10px;
-  }
-  
   #fullName {
     font-size: 1.2rem;
   }
@@ -54,7 +50,7 @@
 /* Móvil */
 @media (max-width: 480px) {
   #fullName {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
   
   #profesion {
