@@ -1,6 +1,4 @@
 section {
-    background-color: var(--clr-black);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     position: relative;
     overflow: hidden;
     min-height: 400px;
@@ -62,15 +60,16 @@ h1 {
     padding-top: 1rem;
     margin-bottom: 0 !important;
     color: var(--clr-white) !important;
-    transform: translateY(-100%);
+    transform: translateY(-300%);
     opacity: 0;
+    font-size: clamp(2rem, 10vw, 3.5rem);
     animation: slideIn 5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     animation-delay: 0.3s;
 }
 
 @keyframes slideIn {
     from {
-        transform: translateY(-150%);
+        transform: translateY(-300%);
         opacity: 0;
     }
 
@@ -81,19 +80,18 @@ h1 {
 }
 
 .gradient-text {
-    font-size: 2rem;
     font-weight: 900;
     background: linear-gradient(45deg,
             var(--clr-blue) 0%,
-            #8b5cf6 25%,
-            #ef4444 50%,
+            var(--clr-purple) 25%,
+            var(--clr-red) 50%,
             var(--clr-green) 75%,
             var(--clr-blue) 100%);
     background-size: 200% auto;
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
-    animation: gradientScroll 10s linear infinite;
+    animation: gradientScroll 5s linear infinite;
 }
 
 @keyframes gradientScroll {
@@ -108,13 +106,13 @@ h1 {
 
 /* Efecto máquina de escribir */
 .typewriter {
-    margin: 0;
     display: inline-block;
     position: relative;
     overflow: hidden;
     white-space: nowrap;
+    font-size: 2rem;
     opacity: 0;
-    animation: typing 5s steps(50, end) forwards;
+    animation: typing 3s steps(60, end) forwards;
     animation-delay: 5s;
 }
 
@@ -131,11 +129,43 @@ h1 {
 }
 
 .lead {
-    padding: 0 0 1rem 0 !important;
+    font-size: 1rem;
+    padding: 0 10px !important;
     margin-top: 0 !important;
     color: var(--clr-white) !important;
     position: relative;
+    perspective: 500px;
     z-index: 2;
+}
+
+.leadUp,
+.leadDown {
+    display: inline-block;
+    opacity: 0;
+    transform: rotateX(90deg);
+    animation: hologramIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.leadUp {
+    animation-delay: 7s;
+}
+
+.leadDown {
+    animation-delay: 7.8s;
+}
+
+@keyframes hologramIn {
+    0% {
+        opacity: 0;
+        transform: rotateX(90deg) translateY(30px);
+        text-shadow: 0 0 10px var(--clr-blue);
+    }
+
+    100% {
+        opacity: 1;
+        transform: rotateX(0) translateY(0);
+        text-shadow: 0 0 20px var(--clr-purple), 0 0 10px var(--clr-blue);
+    }
 }
 
 .btn-primary.btn-lg {
@@ -153,7 +183,8 @@ h1 {
     animation:
         shadowPulse 5s linear infinite,
         slideInUp 5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-    animation-delay: 0.3s;
+    opacity: 0;
+    animation-delay: 8s;
 }
 
 @keyframes shadowPulse {
@@ -162,11 +193,11 @@ h1 {
     }
 
     25% {
-        box-shadow: 0 0 30px 7px #8b5cf6;
+        box-shadow: 0 0 30px 7px var(--clr-purple);
     }
 
     50% {
-        box-shadow: 0 0 20px 5px #ef4444;
+        box-shadow: 0 0 20px 5px var(--clr-red);
     }
 
     75% {
@@ -188,9 +219,4 @@ h1 {
         transform: translateY(0);
         opacity: 1;
     }
-}
-
-.btn-primary.btn-lg:hover {
-    transform: translateY(-3px);
-    filter: brightness(1.1);
 }

@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IconRowsComponent } from './icon-rows/icon-rows.component';
+import { ImageGridComponent } from './image-grid/image-grid.component';
 
 @Component({
   selector: 'app-gallery',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconRowsComponent, ImageGridComponent],
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.css']
 })

@@ -71,7 +71,7 @@
   background-color: #e2e6ea;
   color: #212529;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 2px solid var(--clr-green);
+  border: 1px solid var(--clr-green);
 }
 
 /* Button Layout */

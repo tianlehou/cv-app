@@ -1,53 +1,5 @@
-/* Contenedor principal */
 .gallery-container {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-}
-
-.icon-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    padding: 15px 0;
-    margin: 10px;
-    position: relative;
-}
-
-/* Contenedor de cada icono */
-.icon-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.icon {
-    font-size: 24px;
-    cursor: pointer;
-    color: #999;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-/* Grid de imágenes (existente) */
-.image-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-}
-
-.image-item {
-    width: 100%;
-    aspect-ratio: 1;
-    overflow: hidden;
-    position: relative;
-}
-
-.image-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
