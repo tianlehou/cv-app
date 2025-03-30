@@ -1,4 +1,17 @@
 <div class="gallery-container">
-    <app-icon-rows></app-icon-rows>
-    <app-image-grid [images]="images"></app-image-grid>
+    <app-icon-rows (iconSelected)="onIconSelected($event)"></app-icon-rows>
+    
+    <div class="content-container">
+        @switch (activeView) {
+            @case ('image') {
+                <app-image-grid [images]="images"></app-image-grid>
+            }
+            @case ('video') {
+                <app-video-grid [videos]="videoList"></app-video-grid>
+            }
+            @case ('cv') {
+                <app-cv-grid [cvs]="cvList"></app-cv-grid>
+            }
+        }
+    </div>
 </div>

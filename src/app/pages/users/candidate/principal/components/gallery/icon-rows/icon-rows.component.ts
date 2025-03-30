@@ -1,12 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { GalleryView } from '../gallery.component';
+
+type IconType = 'image' | 'video' | 'cv';
 
 @Component({
   selector: 'app-icon-rows',
   standalone: true,
-  imports: [],
   templateUrl: './icon-rows.component.html',
-  styleUrl: './icon-rows.component.css'
+  styleUrls: ['./icon-rows.component.css']
 })
 export class IconRowsComponent {
+  @Output() iconSelected = new EventEmitter<GalleryView>();
 
+  selectIcon(iconType: GalleryView): void {
+    this.iconSelected.emit(iconType);
+  }
 }

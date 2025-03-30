@@ -1,0 +1,14 @@
+<div class="cv-grid">
+    <div *ngFor="let cv of cvs" class="cv-item">
+        <div class="cv-icon">
+            <i class="fas fa-file-pdf"></i>
+        </div>
+        <div class="cv-info">
+            <h4>{{ cv.name }}</h4>
+            <p>{{ cv.position }}</p>
+            <a [href]="cv.downloadUrl" download class="download-btn">
+                <i class="fas fa-download"></i> Descargar
+            </a>
+        </div>
+    </div>
+</div>

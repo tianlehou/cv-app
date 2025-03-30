@@ -12,14 +12,26 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.icon-container:hover {
+    transform: translateY(-3px);
 }
 
 .icon {
     font-size: 24px;
-    cursor: pointer;
     color: #999;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+}
+
+.icon-container:hover .icon {
+    color: #555;
+    transform: scale(1.1);
+}
+
+.icon-container.active .icon {
+    color: var(--clr-primary); /* Usa tu color principal */
+    transform: scale(1.2);
 }
