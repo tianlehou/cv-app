@@ -2,36 +2,58 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2px;
-    padding: 15px 0;
-    margin: 10px;
-    position: relative;
+    padding: 0;
+    margin: 0 0 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .icon-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     position: relative;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.icon-container:hover {
-    transform: translateY(-3px);
+    padding: 16px 0;
+    transition: all 0.2s ease;
 }
 
 .icon {
-    font-size: 24px;
-    color: #999;
-    transition: all 0.3s ease;
+    font-size: 20px;
+    color: var(--clr-text);
+    transition: all 0.2s ease;
 }
 
 .icon-container:hover .icon {
-    color: #555;
-    transform: scale(1.1);
+    color: var(--clr-blue);
+}
+
+.active-line {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--clr-blue);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease;
 }
 
 .icon-container.active .icon {
-    color: var(--clr-primary); /* Usa tu color principal */
-    transform: scale(1.2);
+    color: var(--clr-blue);
+}
+
+.icon-container.active .active-line {
+    transform: scaleX(1);
+}
+
+/* Efecto hover más pronunciado */
+.icon-container:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Tamaño de iconos más grande cuando están activos */
+.icon-container.active .icon {
+    transform: scale(1.1);
 }

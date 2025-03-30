@@ -1,7 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { GalleryView } from '../gallery.component';
-
-type IconType = 'image' | 'video' | 'cv';
 
 @Component({
   selector: 'app-icon-rows',
@@ -10,6 +8,7 @@ type IconType = 'image' | 'video' | 'cv';
   styleUrls: ['./icon-rows.component.css']
 })
 export class IconRowsComponent {
+  @Input() activeView: GalleryView | null = null;
   @Output() iconSelected = new EventEmitter<GalleryView>();
 
   selectIcon(iconType: GalleryView): void {

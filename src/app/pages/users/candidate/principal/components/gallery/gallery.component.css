@@ -1,19 +1,20 @@
 .gallery-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 935px; /* Típico ancho de Instagram */
     margin: 0 auto;
-    padding: 20px;
+    padding: 0;
+    /* background: var(--clr-dark); */
 }
 
 .content-container {
-    margin-top: 20px;
+    margin-top: 0;
     min-height: 500px;
     transition: all 0.3s ease;
 }
 
 /* Efecto de transición suave entre grids */
 .content-container > * {
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeIn 1s ease-out;
 }
 
 @keyframes fadeIn {

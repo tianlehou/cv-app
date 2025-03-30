@@ -1,5 +1,8 @@
 <div class="gallery-container">
-    <app-icon-rows (iconSelected)="onIconSelected($event)"></app-icon-rows>
+    <app-icon-rows 
+        [activeView]="activeView"
+        (iconSelected)="onIconSelected($event)">
+    </app-icon-rows>
     
     <div class="content-container">
         @switch (activeView) {
