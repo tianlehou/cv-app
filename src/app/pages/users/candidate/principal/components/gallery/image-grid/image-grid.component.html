@@ -1,5 +1,28 @@
 <div class="image-grid">
-    <div *ngFor="let image of images" class="image-item">
-        <img [src]="image.url" alt="Gallery image" />
+    <!-- Upload Button -->
+    <div class="upload-container">
+        <label for="image-upload" class="upload-button">
+            <i class="fas fa-plus"></i> Subir imagen
+        </label>
+        <input 
+            id="image-upload" 
+            type="file" 
+            accept="image/*" 
+            style="display: none;"
+            (change)="onFileSelected($event)"
+        >
+    </div>
+
+    <!-- Images Grid -->
+    <div *ngFor="let image of userImages" class="image-item">
+        <img [src]="image" alt="User uploaded image">
+        <button class="delete-button" (click)="deleteImage(image)">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
     </div>
 </div>
