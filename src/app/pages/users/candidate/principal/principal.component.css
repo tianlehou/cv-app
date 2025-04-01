@@ -35,9 +35,10 @@ app-custom-button {
 
 .profile-components-row {
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 20px;
   margin-top: 1rem;
-  align-items: center;
   width: 100%;
 }
 

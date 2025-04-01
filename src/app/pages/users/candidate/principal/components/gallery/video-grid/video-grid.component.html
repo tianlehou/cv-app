@@ -1,10 +1,23 @@
 <div class="video-grid">
-    <!-- Upload Button -->
+    <!-- Upload Button & Progress -->
     <div class="upload-container">
-        <label for="video-upload" class="upload-button">
-            <i class="fas fa-plus"></i> Subir video
-        </label>
-        <input id="video-upload" type="file" accept="video/*" style="display: none;" (change)="onFileSelected($event)">
+        <div *ngIf="uploadProgress === null; else progressTemplate" class="upload-button">
+            <label for="video-upload">
+                <i class="fas fa-plus"></i> Subir video
+            </label>
+            <input id="video-upload" type="file" accept="video/*" hidden (click)="$event.stopPropagation()"
+                (change)="onFileSelected($event)">
+        </div>
+        <ng-template #progressTemplate>
+            <div class="upload-progress">
+                <div class="progress-bar" [ngStyle]="{ 'width': uploadProgress + '%' }">
+                    {{ uploadProgress }}%
+                </div>
+                <div class="progress-size">
+                    {{ uploadedSize | filesize }} de {{ totalSize | filesize }}
+                </div>
+            </div>
+        </ng-template>
     </div>
 
     <!-- Videos Grid -->
