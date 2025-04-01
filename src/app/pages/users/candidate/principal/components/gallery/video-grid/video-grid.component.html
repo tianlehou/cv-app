@@ -1,9 +1,31 @@
 <div class="video-grid">
-    <div *ngFor="let video of videos" class="video-item">
+    <!-- Upload Button -->
+    <div class="upload-container">
+        <label for="video-upload" class="upload-button">
+            <i class="fas fa-plus"></i> Subir video
+        </label>
+        <input id="video-upload" type="file" accept="video/*" style="display: none;" (change)="onFileSelected($event)">
+    </div>
+
+    <!-- Videos Grid -->
+    <div *ngFor="let video of userVideos" class="video-item">
         <video controls>
-            <source [src]="video.url" [type]="video.type">
-            Your browser does not support the video tag.
+            <source [src]="video" type="video/mp4">
+            Tu navegador no soporta videos.
         </video>
-        <div class="video-title">{{ video.title }}</div>
+        <button class="delete-button" (click)="deleteVideo(video)">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
     </div>
 </div>
+
+<!-- Modal de confirmación -->
+<app-delete-confirm-modal [isVisible]="isDeleteModalVisible" [title]="'Eliminar Video'"
+    [message]="'¿Estás seguro de que deseas eliminar este video?'" (confirm)="onDeleteConfirmed()"
+    (cancel)="onDeleteCanceled()">
+</app-delete-confirm-modal>

@@ -120,7 +120,6 @@ export class FirebaseService {
         editableEmail?: string;
         phone?: string;
         profesion?: string;
-
         aboutMe?: string;
         academicFormation?: string;
         experience?: string;
@@ -129,6 +128,8 @@ export class FirebaseService {
           picture?: {
             profilePicture?: string;
           };
+          galleryImages?: string;
+          galleryVideos?: string;
         };
         personalData?: string;
         skills?: string;

@@ -11,13 +11,14 @@ import {
 import { FirebaseService } from '../../../../../../../services/firebase.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EnvironmentInjector } from '@angular/core';
+import { DeleteConfirmModalComponent } from '../../../../../../../shared/components/delete-confirmation-modal/delete-confirmation-modal.component';
 
 @Component({
   selector: 'app-image-grid',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DeleteConfirmModalComponent],
   templateUrl: './image-grid.component.html',
-  styleUrls: ['./image-grid.component.css']
+  styleUrls: ['./image-grid.component.css'],
 })
 export class ImageGridComponent implements OnInit {
   @Input() currentUser: User | null = null;
@@ -26,6 +27,8 @@ export class ImageGridComponent implements OnInit {
   selectedFile: File | null = null;
   userImages: string[] = [];
   isLoading = false;
+  isDeleteModalVisible = false;
+  imageToDelete: string | null = null;
   private injector = inject(EnvironmentInjector);
 
   constructor(
@@ -48,7 +51,7 @@ export class ImageGridComponent implements OnInit {
 
   private initializeForm(): void {
     this.imagesForm = this.fb.group({
-      imageUpload: ['']
+      imageUpload: [''],
     });
   }
 
@@ -57,7 +60,9 @@ export class ImageGridComponent implements OnInit {
 
     this.isLoading = true;
     try {
-      const userData = await this.firebaseService.getUserData(this.userEmailKey);
+      const userData = await this.firebaseService.getUserData(
+        this.userEmailKey
+      );
       this.userImages = userData?.profileData?.multimedia?.galleryImages || [];
     } catch (error) {
       console.error('Error loading images:', error);
@@ -95,26 +100,32 @@ export class ImageGridComponent implements OnInit {
         const downloadURL = await getDownloadURL(storageRef);
 
         // Obtener datos actuales del usuario
-        const userData = await this.firebaseService.getUserData(this.userEmailKey!);
-        
+        const userData = await this.firebaseService.getUserData(
+          this.userEmailKey!
+        );
+
         // Crear array actualizado de imágenes
-        const currentImages = userData?.profileData?.multimedia?.galleryImages || [];
+        const currentImages =
+          userData?.profileData?.multimedia?.galleryImages || [];
         const updatedImages = [...currentImages, downloadURL];
 
         // Crear objeto actualizado
         const updatedData = {
           profileData: {
-            ...userData?.profileData || {},
+            ...(userData?.profileData || {}),
             multimedia: {
-              ...userData?.profileData?.multimedia || {},
-              galleryImages: updatedImages
-            }
-          }
+              ...(userData?.profileData?.multimedia || {}),
+              galleryImages: updatedImages,
+            },
+          },
         };
 
         // Actualizar en Firebase
         if (this.currentUser && this.currentUser.email) {
-          await this.firebaseService.updateUserData(this.currentUser.email!, updatedData);
+          await this.firebaseService.updateUserData(
+            this.currentUser.email!,
+            updatedData
+          );
         } else {
           throw new Error('User email is null');
         }
@@ -131,44 +142,57 @@ export class ImageGridComponent implements OnInit {
     }
   }
 
-  async deleteImage(imageUrl: string): Promise<void> {
-    if (!this.userEmailKey || !this.currentUser?.email) return;
+  deleteImage(imageUrl: string): void {
+    this.imageToDelete = imageUrl;
+    this.isDeleteModalVisible = true;
+  }
 
-    if (!confirm('¿Estás seguro de que quieres eliminar esta imagen?')) return;
+  onDeleteConfirmed(): void {
+    if (!this.imageToDelete) return;
+    this.performDelete(this.imageToDelete);
+    this.isDeleteModalVisible = false;
+    this.imageToDelete = null;
+  }
+
+  onDeleteCanceled(): void {
+    this.isDeleteModalVisible = false;
+    this.imageToDelete = null;
+  }
+
+  private async performDelete(imageUrl: string): Promise<void> {
+    if (!this.userEmailKey || !this.currentUser?.email) return;
 
     this.isLoading = true;
     try {
       await runInInjectionContext(this.injector, async () => {
-        // Eliminar imagen del storage
         const imageRef = ref(this.storage, imageUrl);
         await deleteObject(imageRef);
 
-        // Obtener datos actuales del usuario
-        const userData = await this.firebaseService.getUserData(this.userEmailKey!);
-        
-        // Filtrar la imagen eliminada
-        const currentImages = userData?.profileData?.multimedia?.galleryImages || [];
-        const updatedImages = currentImages.filter((img: string) => img !== imageUrl);
+        const userData = await this.firebaseService.getUserData(
+          this.userEmailKey!
+        );
+        const currentImages =
+          userData?.profileData?.multimedia?.galleryImages || [];
+        const updatedImages = currentImages.filter(
+          (img: string) => img !== imageUrl
+        );
 
-        // Crear objeto actualizado
         const updatedData = {
           profileData: {
-            ...userData?.profileData || {},
+            ...(userData?.profileData || {}),
             multimedia: {
-              ...userData?.profileData?.multimedia || {},
-              galleryImages: updatedImages
-            }
-          }
+              ...(userData?.profileData?.multimedia || {}),
+              galleryImages: updatedImages,
+            },
+          },
         };
 
-        // Actualizar en Firebase
         if (this.currentUser?.email) {
-          await this.firebaseService.updateUserData(this.currentUser.email, updatedData);
-        } else {
-          throw new Error('User email is null');
+          await this.firebaseService.updateUserData(
+            this.currentUser.email,
+            updatedData
+          );
         }
-
-        // Recargar imágenes
         await this.loadUserImages();
       });
     } catch (error) {
@@ -181,6 +205,9 @@ export class ImageGridComponent implements OnInit {
 }
 
 // Función auxiliar para ejecutar en contexto de inyección
-function runInInjectionContext(injector: EnvironmentInjector, callback: () => Promise<void>): Promise<void> {
+function runInInjectionContext(
+  injector: EnvironmentInjector,
+  callback: () => Promise<void>
+): Promise<void> {
   return injector.runInContext(callback);
 }

@@ -1,27 +1,71 @@
+/* video-grid.component.css */
 .video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
-    padding: 10px;
+    gap: 16px;
+    padding: 16px;
 }
 
 .video-item {
-    position: relative;
+    width: 100%;
     aspect-ratio: 16/9;
     overflow: hidden;
+    position: relative;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .video-item video {
     width: 100%;
     height: 100%;
+    cursor: pointer;
     object-fit: cover;
     transition: transform 0.3s ease;
 }
 
 .video-item:hover video {
-    transform: scale(1.03);
+    transform: scale(1.02);
+}
+
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    aspect-ratio: 16/9;
+    transition: all 0.3s ease;
+    padding: 10px;
+}
+
+.upload-container:hover {
+    border-color: var(--clr-primary);
+    background: rgba(var(--clr-primary-rgb), 0.05);
+}
+
+.upload-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    color: #666;
+}
+
+.upload-button i {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.video-title-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 8px;
 }
 
 .video-title {
@@ -29,8 +73,65 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
     color: white;
     padding: 10px;
     font-size: 0.9rem;
+}
+
+.delete-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--clr-red);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.video-item:hover .delete-button {
+    opacity: 1;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column: 1 / -1;
+    padding: 20px;
+}
+
+.loading-spinner i {
+    font-size: 2rem;
+    color: var(--clr-primary);
+}
+
+.error-message {
+    color: var(--clr-red);
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.loading-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 50%;
+}
+
+.loading-spinner i {
+    font-size: 3rem;
+    color: var(--clr-primary);
 }

@@ -4,13 +4,7 @@
         <label for="image-upload" class="upload-button">
             <i class="fas fa-plus"></i> Subir imagen
         </label>
-        <input 
-            id="image-upload" 
-            type="file" 
-            accept="image/*" 
-            style="display: none;"
-            (change)="onFileSelected($event)"
-        >
+        <input id="image-upload" type="file" accept="image/*" style="display: none;" (change)="onFileSelected($event)">
     </div>
 
     <!-- Images Grid -->
@@ -26,3 +20,9 @@
         <i class="fas fa-spinner fa-spin"></i>
     </div>
 </div>
+
+<!-- Modal de confirmación -->
+<app-delete-confirm-modal [isVisible]="isDeleteModalVisible" [title]="'Eliminar Imagen'"
+    [message]="'¿Estás seguro de que deseas eliminar esta imagen?'" (confirm)="onDeleteConfirmed()"
+    (cancel)="onDeleteCanceled()">
+</app-delete-confirm-modal>

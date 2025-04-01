@@ -8,7 +8,7 @@
         <app-image-grid *ngIf="currentUser" [currentUser]="currentUser"></app-image-grid>
         }
         @case ('video') {
-        <app-video-grid [videos]="videoList"></app-video-grid>
+        <app-video-grid *ngIf="currentUser" [currentUser]="currentUser"></app-video-grid>
         }
         @case ('cv') {
         <app-cv-grid [cvs]="cvList"></app-cv-grid>
