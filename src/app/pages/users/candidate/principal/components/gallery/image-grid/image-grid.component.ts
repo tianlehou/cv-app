@@ -75,7 +75,17 @@ export class ImageGridComponent implements OnInit {
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
-      this.selectedFile = input.files[0];
+      const file = input.files[0];
+      
+      // Validar tipo de archivo
+      if (!file.type.startsWith('image/')) {
+        alert('Formato de archivo inválido. Solo se permiten imágenes.');
+        input.value = '';
+        this.selectedFile = null;
+        return;
+      }
+  
+      this.selectedFile = file;
       this.uploadImage();
     }
   }
