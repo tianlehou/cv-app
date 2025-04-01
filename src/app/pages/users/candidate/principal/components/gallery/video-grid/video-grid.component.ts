@@ -5,6 +5,7 @@ import {
   OnInit,
   ChangeDetectorRef,
   NgZone,
+  EnvironmentInjector,
 } from '@angular/core';
 import { CommonModule, NgStyle } from '@angular/common';
 import { User } from '@angular/fire/auth';
@@ -15,20 +16,15 @@ import {
   deleteObject,
   uploadBytesResumable,
 } from '@angular/fire/storage';
+import { ToastService } from '../../../../../../../services/toast.service';
 import { FirebaseService } from '../../../../../../../services/firebase.service';
-import { EnvironmentInjector } from '@angular/core';
-import { DeleteConfirmModalComponent } from '../../../../../../../shared/components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { DeleteConfirmModalComponent } from '../../../../../../../components/delete-confirmation-modal/delete-confirmation-modal.component';
 import { FileSizePipe } from '../../../../../../../pipes/filesize.pipe';
 
 @Component({
   selector: 'app-video-grid',
   standalone: true,
-  imports: [
-    CommonModule,
-    DeleteConfirmModalComponent,
-    FileSizePipe,
-    NgStyle,
-  ],
+  imports: [CommonModule, DeleteConfirmModalComponent, FileSizePipe, NgStyle],
   templateUrl: './video-grid.component.html',
   styleUrls: ['./video-grid.component.css'],
 })
@@ -49,10 +45,11 @@ export class VideoGridComponent implements OnInit {
   private injector = inject(EnvironmentInjector);
 
   constructor(
-    private storage: Storage,
-    private firebaseService: FirebaseService,
     private cdr: ChangeDetectorRef,
-    private ngZone: NgZone
+    private firebaseService: FirebaseService,
+    private ngZone: NgZone,
+    private storage: Storage,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -75,16 +72,19 @@ export class VideoGridComponent implements OnInit {
     });
 
     try {
-      const userData = await this.firebaseService.getUserData(this.userEmailKey);
-      
+      const userData = await this.firebaseService.getUserData(
+        this.userEmailKey
+      );
+
       this.ngZone.run(() => {
-        this.userVideos = userData?.profileData?.multimedia?.galleryVideos || [];
+        this.userVideos =
+          userData?.profileData?.multimedia?.galleryVideos || [];
         this.cdr.detectChanges();
       });
     } catch (error) {
       this.ngZone.run(() => {
         console.error('Error loading videos:', error);
-        alert('Error cargando videos');
+        this.toast.show('Error cargando videos', 'error');
         this.cdr.detectChanges();
       });
     } finally {
@@ -126,7 +126,9 @@ export class VideoGridComponent implements OnInit {
 
     try {
       await runInInjectionContext(this.injector, async () => {
-        const videoName = `gallery-video-${Date.now()}.${this.selectedFile!.name.split('.').pop()}`;
+        const videoName = `gallery-video-${Date.now()}.${this.selectedFile!.name.split(
+          '.'
+        ).pop()}`;
         const storageRef = ref(
           this.storage,
           `cv-app/users/${this.userEmailKey}/gallery-videos/${videoName}`
@@ -149,7 +151,7 @@ export class VideoGridComponent implements OnInit {
           (error) => {
             this.ngZone.run(() => {
               console.error('Upload error:', error);
-              alert('Error al subir el video');
+              this.toast.show('Error al subir el video', 'error');
               this.resetUploadState();
             });
           },
@@ -157,8 +159,11 @@ export class VideoGridComponent implements OnInit {
             await runInInjectionContext(this.injector, async () => {
               const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
-              const userData = await this.firebaseService.getUserData(this.userEmailKey!);
-              const currentVideos = userData?.profileData?.multimedia?.galleryVideos || [];
+              const userData = await this.firebaseService.getUserData(
+                this.userEmailKey!
+              );
+              const currentVideos =
+                userData?.profileData?.multimedia?.galleryVideos || [];
               const updatedVideos = [...currentVideos, downloadURL];
 
               const updatedData = {
@@ -178,7 +183,7 @@ export class VideoGridComponent implements OnInit {
             });
 
             this.ngZone.run(() => {
-              alert('Video subido exitosamente');
+              this.toast.show('Video subido exitosamente', 'success');
               this.loadUserVideos();
               this.resetUploadState();
             });
@@ -189,7 +194,7 @@ export class VideoGridComponent implements OnInit {
       this.ngZone.run(() => {
         this.resetUploadState();
         console.error('Error uploading video:', error);
-        alert('Error al subir el video');
+        this.toast.show('Error al subir el video', 'error');
         this.cdr.detectChanges();
       });
     }
@@ -236,9 +241,14 @@ export class VideoGridComponent implements OnInit {
         const videoRef = ref(this.storage, videoUrl);
         await deleteObject(videoRef);
 
-        const userData = await this.firebaseService.getUserData(this.userEmailKey!);
-        const currentVideos = userData?.profileData?.multimedia?.galleryVideos || [];
-        const updatedVideos = currentVideos.filter((vid: string) => vid !== videoUrl);
+        const userData = await this.firebaseService.getUserData(
+          this.userEmailKey!
+        );
+        const currentVideos =
+          userData?.profileData?.multimedia?.galleryVideos || [];
+        const updatedVideos = currentVideos.filter(
+          (vid: string) => vid !== videoUrl
+        );
 
         const updatedData = {
           profileData: {
@@ -257,13 +267,14 @@ export class VideoGridComponent implements OnInit {
       });
 
       this.ngZone.run(() => {
+        this.toast.show('Video eliminado exitosamente', 'success');
         this.loadUserVideos();
         this.cdr.detectChanges();
       });
     } catch (error) {
       this.ngZone.run(() => {
         console.error('Error deleting video:', error);
-        alert('Error eliminando video');
+        this.toast.show('Error eliminando video', 'error');
         this.cdr.detectChanges();
       });
     } finally {

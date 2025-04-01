@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FirebaseService } from '../../../../services/firebase.service';
 
 // Components
-import { CustomButtonComponent } from '../../../../shared/components/buttons/custom-button/custom-button.component';
+import { CustomButtonComponent } from '../../../../components/buttons/custom-button/custom-button.component';
 import { ProfilePictureComponent } from './components/profile-picture/profile-picture.component';
 import { PersonalDataComponent } from './components/personal-data/personal-data.component';
 import { ExperienceComponent } from './components/experience/experience.component';
@@ -14,7 +14,7 @@ import { LanguagesComponent } from './components/languages/languages.component';
 import { SkillsComponent } from './components/skills/skills.component';
 
 // Custom components
-import { SidebarComponent } from '../../../../shared/components/buttons/sidebar/sidebar.component';
+import { SidebarComponent } from '../../../../components/buttons/sidebar/sidebar.component';
 @Component({
   selector: 'app-profile',
   standalone: true,

@@ -11,7 +11,7 @@ import {
 import { FirebaseService } from '../../../../../../../services/firebase.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EnvironmentInjector } from '@angular/core';
-import { DeleteConfirmModalComponent } from '../../../../../../../shared/components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { DeleteConfirmModalComponent } from '../../../../../../../components/delete-confirmation-modal/delete-confirmation-modal.component';
 
 @Component({
   selector: 'app-image-grid',

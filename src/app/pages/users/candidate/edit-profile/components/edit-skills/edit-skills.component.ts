@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FirebaseService } from '../../../../../../services/firebase.service';
-import { DeleteConfirmModalComponent } from '../../../../../../shared/components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { DeleteConfirmModalComponent } from '../../../../../../components/delete-confirmation-modal/delete-confirmation-modal.component';
 import { User } from '@angular/fire/auth';
 
 @Component({

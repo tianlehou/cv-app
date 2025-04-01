@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FirebaseService } from '../../../../services/firebase.service';
 
 // Custom components
-import { SidebarComponent } from '../../../../shared/components/buttons/sidebar/sidebar.component';
+import { SidebarComponent } from '../../../../components/buttons/sidebar/sidebar.component';
 
 // Components
 import { ProfilePictureComponent } from './components/profile-picture/profile-picture.component';
@@ -24,7 +24,7 @@ import { GalleryComponent } from './components/gallery/gallery.component';
   templateUrl: './principal.component.html',
   styleUrls: [
     './principal.component.css',
-    '../../../../shared/components/buttons/custom-button/custom-button.component.css',
+    '../../../../components/buttons/custom-button/custom-button.component.css',
   ],
 })
 export class PrincipalComponent implements OnInit {
