@@ -46,3 +46,8 @@
   background-color: var(--clr-red);
   color: var(--clr-white);
 }
+
+.confirm-btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
