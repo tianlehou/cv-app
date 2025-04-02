@@ -123,14 +123,6 @@
     opacity: 1;
 }
 
-/* .loading-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    grid-column: 1 / -1;
-    padding: 20px;
-} */
-
 .error-message {
     color: var(--clr-red);
     font-size: 0.8rem;

@@ -110,10 +110,11 @@ h1 {
     position: relative;
     overflow: hidden;
     white-space: nowrap;
-    font-size: 2rem;
+    font-size: clamp(2rem, 10vw, 3.5rem);
+    font-weight: bolder;
     opacity: 0;
-    animation: typing 3s steps(60, end) forwards;
-    animation-delay: 5s;
+    animation: typing 5s steps(60, end) forwards;
+    animation-delay: 4s;
 }
 
 @keyframes typing {
@@ -147,11 +148,11 @@ h1 {
 }
 
 .leadUp {
-    animation-delay: 7s;
+    animation-delay: 5s;
 }
 
 .leadDown {
-    animation-delay: 7.8s;
+    animation-delay: 5.8s;
 }
 
 @keyframes hologramIn {
@@ -184,7 +185,7 @@ h1 {
         shadowPulse 5s linear infinite,
         slideInUp 5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     opacity: 0;
-    animation-delay: 8s;
+    animation-delay: 5.8s;
 }
 
 @keyframes shadowPulse {

@@ -75,10 +75,13 @@ export class VideoGridComponent implements OnInit {
       const userData = await this.firebaseService.getUserData(
         this.userEmailKey
       );
+      const videos = userData?.profileData?.multimedia?.galleryVideos || [];
+      
+      // Ordenar videos por fecha (nuevos primero)
+      const sortedVideos = this.sortVideosByDate(videos);
 
       this.ngZone.run(() => {
-        this.userVideos =
-          userData?.profileData?.multimedia?.galleryVideos || [];
+        this.userVideos = sortedVideos;
         this.cdr.detectChanges();
       });
     } catch (error) {
@@ -93,6 +96,19 @@ export class VideoGridComponent implements OnInit {
         this.cdr.detectChanges();
       });
     }
+  }
+
+  //método para ordenar videos
+  private sortVideosByDate(videos: string[]): string[] {
+    return videos.sort((a, b) => {
+      const getTimestamp = (url: string) => {
+        const filename = url.split('%2F').pop()?.split('?')[0] || '';
+        const timestampMatch = filename.match(/-(\d+)\./);
+        return timestampMatch ? parseInt(timestampMatch[1], 10) : 0;
+      };
+      
+      return getTimestamp(b) - getTimestamp(a); // Orden descendente
+    });
   }
 
   onFileSelected(event: Event): void {

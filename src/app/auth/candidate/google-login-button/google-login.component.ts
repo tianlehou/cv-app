@@ -19,9 +19,9 @@ import { FirebaseService } from '../../../services/firebase.service';
       .google-login-btn {
         width: 100%;
         padding: 10px 15px;
-        background-color: #fff;
-        color: #757575;
-        border: 1px solid #ddd;
+        background-color: var(--clr-white);
+        border: 1px solid var(--clr-green);
+        color: var(--clr-green);
         border-radius: 4px;
         font-size: 16px;
         cursor: pointer;
@@ -33,8 +33,9 @@ import { FirebaseService } from '../../../services/firebase.service';
       }
 
       .google-login-btn:hover {
-        background-color: #f8f9fa;
-        border-color: #ccc;
+        color: var(--clr-white);
+        background-color: var(--clr-green);
+        border: 1px solid var(--clr-green);
       }
 
       .google-login-btn:active {
