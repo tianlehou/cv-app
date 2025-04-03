@@ -6,8 +6,11 @@ import {
   ChangeDetectorRef,
   NgZone,
   EnvironmentInjector,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+  AfterViewInit,
 } from '@angular/core';
-import { ViewChildren, QueryList, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule, NgStyle } from '@angular/common';
 import { User } from '@angular/fire/auth';
 import {
@@ -16,6 +19,7 @@ import {
   getDownloadURL,
   deleteObject,
   uploadBytesResumable,
+  getMetadata
 } from '@angular/fire/storage';
 import { ToastService } from '../../../../../../../services/toast.service';
 import { FirebaseService } from '../../../../../../../services/firebase.service';
@@ -30,7 +34,9 @@ import { FileSizePipe } from '../../../../../../../pipes/filesize.pipe';
   styleUrls: ['./video-grid.component.css'],
 })
 export class VideoGridComponent implements OnInit, AfterViewInit {
-  @ViewChildren('videoPlayer') videoPlayers!: QueryList<ElementRef<HTMLVideoElement>>;
+  @ViewChildren('videoPlayer') videoPlayers!: QueryList<
+    ElementRef<HTMLVideoElement>
+  >;
   @Input() currentUser: User | null = null;
   userEmailKey: string | null = null;
   selectedFile: File | null = null;
@@ -39,7 +45,7 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
   isDeleteModalVisible = false;
   videoToDelete: string | null = null;
   expandedStates: { [videoUrl: string]: boolean } = {};
-
+  totalUploadedMB: number = 0;
   // Propiedades de progreso
   uploadProgress: number | null = null;
   uploadedSize: number = 0;
@@ -63,20 +69,24 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.videoPlayers.forEach(video => {
-      video.nativeElement.addEventListener('play', (e: Event) => this.onVideoPlay(e));
+    this.videoPlayers.forEach((video) => {
+      video.nativeElement.addEventListener('play', (e: Event) =>
+        this.onVideoPlay(e)
+      );
     });
 
     this.videoPlayers.changes.subscribe(() => {
-      this.videoPlayers.forEach(video => {
-        video.nativeElement.addEventListener('play', (e: Event) => this.onVideoPlay(e));
+      this.videoPlayers.forEach((video) => {
+        video.nativeElement.addEventListener('play', (e: Event) =>
+          this.onVideoPlay(e)
+        );
       });
     });
   }
 
   private onVideoPlay(event: Event): void {
     const playingVideo = event.target as HTMLVideoElement;
-    this.videoPlayers.forEach(video => {
+    this.videoPlayers.forEach((video) => {
       if (video.nativeElement !== playingVideo) {
         video.nativeElement.pause();
       }
@@ -101,13 +111,12 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
       );
       const videos = userData?.profileData?.multimedia?.galleryVideos || [];
 
-      // Ordenar videos por fecha (nuevos primero)
-      const sortedVideos = this.sortVideosByDate(videos);
+      const sortedVideos = this.sortVideosByDate(videos); // Ordenar videos por fecha (nuevos primero)
+      await this.calculateTotalUploadedSize(sortedVideos); // Calcular el total de MB subidos
 
       this.ngZone.run(() => {
         this.userVideos = sortedVideos;
-        // Initialize expanded states for all videos
-        this.expandedStates = {};
+        this.expandedStates = {}; // Initialize expanded states for all videos
         sortedVideos.forEach((video) => {
           this.expandedStates[video] = false;
         });
@@ -125,6 +134,32 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
         this.cdr.detectChanges();
       });
     }
+  }
+
+  // método para calcular el total de mega subido
+  private async calculateTotalUploadedSize(videos: string[]): Promise<void> {
+    let totalBytes = 0;
+  
+    // Crear un array de promesas para obtener los metadatos de cada video
+    const metadataPromises = videos.map(async (url) => {
+      try {
+        // Crear una referencia al archivo usando la URL
+        const videoRef = ref(this.storage, url);
+        // Obtener los metadatos del archivo
+        const metadata = await getMetadata(videoRef);
+        return metadata.size || 0;
+      } catch (error) {
+        console.error('Error obteniendo metadatos para:', url, error);
+        return 0;
+      }
+    });
+  
+    // Esperar a que todas las promesas se resuelvan
+    const sizes = await Promise.all(metadataPromises);
+    totalBytes = sizes.reduce((sum, size) => sum + size, 0);
+  
+    // Convertir bytes a MB (1 MB = 1048576 bytes)
+    this.totalUploadedMB = totalBytes / 1048576;
   }
 
   //método para ordenar videos
