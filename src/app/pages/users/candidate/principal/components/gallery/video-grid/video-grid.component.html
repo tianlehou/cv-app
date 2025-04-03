@@ -21,11 +21,14 @@
     </div>
 
     <!-- Videos Grid -->
-    <div *ngFor="let video of userVideos" class="video-item">
-        <video controls>
+    <div *ngFor="let video of userVideos" class="video-item" [ngClass]="{'expanded': expandedStates[video]}">
+        <video controls #videoPlayer>
             <source [src]="video" type="video/mp4">
             Tu navegador no soporta videos.
         </video>
+        <button class="toggle-button" (click)="toggleExpansion(video)">
+            <i class="fas" [ngClass]="expandedStates[video] ? 'fa-compress' : 'fa-expand'"></i>
+        </button>
         <button class="delete-button" (click)="deleteVideo(video)">
             <i class="fas fa-trash"></i>
         </button>

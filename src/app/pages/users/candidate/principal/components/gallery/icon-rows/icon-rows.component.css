@@ -20,7 +20,7 @@
 
 .icon {
     font-size: 20px;
-    color: var(--clr-text);
+    color: var(--bg-light);
     transition: all 0.2s ease;
 }
 

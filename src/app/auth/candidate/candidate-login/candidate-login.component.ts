@@ -61,7 +61,7 @@ export class CandidateLoginComponent {
             if (user?.role === 'admin') {
               this.router.navigate(['/main']);
             } else {
-              this.router.navigate(['/profile']);
+              this.router.navigate(['/principal']);
             }
           }, 3000);
         })

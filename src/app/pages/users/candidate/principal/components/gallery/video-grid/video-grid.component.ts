@@ -7,6 +7,7 @@ import {
   NgZone,
   EnvironmentInjector,
 } from '@angular/core';
+import { ViewChildren, QueryList, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule, NgStyle } from '@angular/common';
 import { User } from '@angular/fire/auth';
 import {
@@ -28,7 +29,8 @@ import { FileSizePipe } from '../../../../../../../pipes/filesize.pipe';
   templateUrl: './video-grid.component.html',
   styleUrls: ['./video-grid.component.css'],
 })
-export class VideoGridComponent implements OnInit {
+export class VideoGridComponent implements OnInit, AfterViewInit {
+  @ViewChildren('videoPlayer') videoPlayers!: QueryList<ElementRef<HTMLVideoElement>>;
   @Input() currentUser: User | null = null;
   userEmailKey: string | null = null;
   selectedFile: File | null = null;
@@ -36,6 +38,7 @@ export class VideoGridComponent implements OnInit {
   isLoading = false;
   isDeleteModalVisible = false;
   videoToDelete: string | null = null;
+  expandedStates: { [videoUrl: string]: boolean } = {};
 
   // Propiedades de progreso
   uploadProgress: number | null = null;
@@ -59,6 +62,27 @@ export class VideoGridComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.videoPlayers.forEach(video => {
+      video.nativeElement.addEventListener('play', (e: Event) => this.onVideoPlay(e));
+    });
+
+    this.videoPlayers.changes.subscribe(() => {
+      this.videoPlayers.forEach(video => {
+        video.nativeElement.addEventListener('play', (e: Event) => this.onVideoPlay(e));
+      });
+    });
+  }
+
+  private onVideoPlay(event: Event): void {
+    const playingVideo = event.target as HTMLVideoElement;
+    this.videoPlayers.forEach(video => {
+      if (video.nativeElement !== playingVideo) {
+        video.nativeElement.pause();
+      }
+    });
+  }
+
   private formatEmailKey(email: string): string {
     return email.replace(/\./g, '_');
   }
@@ -76,12 +100,17 @@ export class VideoGridComponent implements OnInit {
         this.userEmailKey
       );
       const videos = userData?.profileData?.multimedia?.galleryVideos || [];
-      
+
       // Ordenar videos por fecha (nuevos primero)
       const sortedVideos = this.sortVideosByDate(videos);
 
       this.ngZone.run(() => {
         this.userVideos = sortedVideos;
+        // Initialize expanded states for all videos
+        this.expandedStates = {};
+        sortedVideos.forEach((video) => {
+          this.expandedStates[video] = false;
+        });
         this.cdr.detectChanges();
       });
     } catch (error) {
@@ -106,9 +135,15 @@ export class VideoGridComponent implements OnInit {
         const timestampMatch = filename.match(/-(\d+)\./);
         return timestampMatch ? parseInt(timestampMatch[1], 10) : 0;
       };
-      
+
       return getTimestamp(b) - getTimestamp(a); // Orden descendente
     });
+  }
+
+  // method to toggle expansion
+  toggleExpansion(videoUrl: string): void {
+    this.expandedStates[videoUrl] = !this.expandedStates[videoUrl];
+    this.cdr.detectChanges();
   }
 
   onFileSelected(event: Event): void {

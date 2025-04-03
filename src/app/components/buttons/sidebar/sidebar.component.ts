@@ -11,7 +11,6 @@ import { FirebaseService } from '../../../services/firebase.service';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
 })
-
 export class SidebarComponent {
   isMenuOpen = false;
 
@@ -25,7 +24,8 @@ export class SidebarComponent {
     event.stopPropagation();
   }
 
+  // Llama al método logout de firebase.service
   logout() {
-    this.firebaseService.logout(); // Llama al método de logout del servicio
+    this.firebaseService.logout();
   }
 }

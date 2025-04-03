@@ -28,12 +28,13 @@ import { GalleryComponent } from './components/gallery/gallery.component';
   ],
 })
 export class PrincipalComponent implements OnInit {
-  currentUser: any = null; // Usa el tipo correcto según tu aplicación
+  currentUser: any = null;
   userRole: string | null = null;
 
   constructor(private firebaseService: FirebaseService) {} // Inyecta el servicio
 
   async ngOnInit(): Promise<void> {
+
     // Usa el método del servicio para obtener el estado de autenticación
     this.firebaseService
       .isAuthenticated()
@@ -42,7 +43,7 @@ export class PrincipalComponent implements OnInit {
           this.currentUser = await this.firebaseService.getCurrentUser();
           console.log('Usuario autenticado:', this.currentUser.email);
 
-          // Obtener el rol usando el servicio
+          // Obtener el rol usando firebase.service
           const userData = await this.firebaseService.getUserData(
             this.currentUser.email.replace(/\./g, '_')
           );
