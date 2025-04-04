@@ -1,13 +1,22 @@
-<!-- image-grid.component.html -->
 <div class="image-grid">
+    <div class="gallery-info" *ngIf="!isLoading">
+        <div class="info-text" *ngIf="userImages.length > 0; else noImages">
+            {{ userImages.length }} foto{{ userImages.length > 1 ? 's' : '' }} cargado{{ userImages.length > 1 ? 's' :
+            '' }}
+        </div>
+        <ng-template #noImages>
+            <div class="info-text">No hay imágenes cargadas.</div>
+        </ng-template>
+    </div>
+
     <!-- Upload Button & Progress -->
     <div class="upload-container">
         <div *ngIf="uploadProgress === null; else progressTemplate" class="upload-button">
             <label for="image-upload">
                 <i class="fas fa-plus"></i> Subir imagen
             </label>
-            <input id="image-upload" type="file" accept="image/*" hidden 
-                   (click)="$event.stopPropagation()" (change)="onFileSelected($event)">
+            <input id="image-upload" type="file" accept="image/*" hidden (click)="$event.stopPropagation()"
+                (change)="onFileSelected($event)">
         </div>
         <ng-template #progressTemplate>
             <div class="upload-progress">
@@ -22,8 +31,15 @@
     </div>
 
     <!-- Images Grid -->
-    <div *ngFor="let image of userImages" class="image-item">
-        <img [src]="image" alt="User uploaded image">
+    <div *ngFor="let image of userImages" class="image-item" (contextmenu)="false" draggable="false"
+        ondrop="return false;">
+        <img [src]="image" alt="User uploaded image" draggable="false">
+        <div class="watermark" [ngClass]="getWatermarkPosition()" [style.opacity]="watermarkOpacity">
+            <div class="watermark-content">
+                <i class="fas fa-user-circle"></i>
+                <span>cv-app dinamic-watermark</span>
+            </div>
+        </div>
         <button class="delete-button" (click)="deleteImage(image)">
             <i class="fas fa-trash"></i>
         </button>
