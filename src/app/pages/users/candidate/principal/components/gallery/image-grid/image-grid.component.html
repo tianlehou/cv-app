@@ -1,26 +1,9 @@
 <app-image-info-bar [isLoading]="isLoading" [userImages]="userImages"></app-image-info-bar>
 <div class="image-grid">
 
-    <!-- Upload Button & Progress -->
-    <div class="upload-container">
-        <div *ngIf="uploadProgress === null; else progressTemplate" class="upload-button">
-            <label for="image-upload">
-                <i class="fas fa-plus"></i> Subir imagen
-            </label>
-            <input id="image-upload" type="file" accept="image/*" hidden (click)="$event.stopPropagation()"
-                (change)="onFileSelected($event)">
-        </div>
-        <ng-template #progressTemplate>
-            <div class="upload-progress">
-                <div class="progress-bar" [ngStyle]="{ 'width': uploadProgress + '%' }">
-                    {{ uploadProgress }}%
-                </div>
-                <div class="progress-size">
-                    {{ uploadedSize | filesize }} de {{ totalSize | filesize }}
-                </div>
-            </div>
-        </ng-template>
-    </div>
+    <!-- Upload Button & Progress Bar -->
+    <app-image-upload-container [userEmailKey]="userEmailKey" (uploadComplete)="handleUploadComplete($event)">
+    </app-image-upload-container>
 
     <!-- Images Grid -->
     <div *ngFor="let image of userImages" class="image-item" (contextmenu)="false" draggable="false"

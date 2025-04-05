@@ -8,20 +8,14 @@ import {
   NgZone,
   EnvironmentInjector,
 } from '@angular/core';
-import { CommonModule, NgStyle } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { User } from '@angular/fire/auth';
-import {
-  Storage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from '@angular/fire/storage';
+import { Storage, ref, deleteObject } from '@angular/fire/storage';
 import { ToastService } from '../../../../../../../services/toast.service';
 import { FirebaseService } from '../../../../../../../services/firebase.service';
 import { DeleteConfirmModalComponent } from '../../../../../../../components/delete-confirmation-modal/delete-confirmation-modal.component';
-import { FileSizePipe } from '../../../../../../../pipes/filesize.pipe';
 import { ImageInfoBarComponent } from './image-info-bar/image-info-bar.component';
+import { ImageUploadContainerComponent } from './image-upload-container/image-upload-container.component';
 
 @Component({
   selector: 'app-image-grid',
@@ -29,9 +23,8 @@ import { ImageInfoBarComponent } from './image-info-bar/image-info-bar.component
   imports: [
     CommonModule,
     DeleteConfirmModalComponent,
-    FileSizePipe,
-    NgStyle,
     ImageInfoBarComponent,
+    ImageUploadContainerComponent,
   ],
   templateUrl: './image-grid.component.html',
   styleUrls: ['./image-grid.component.css'],
@@ -41,16 +34,11 @@ export class ImageGridComponent implements OnInit, OnDestroy {
 
   // Propiedades de estado
   userEmailKey: string | null = null;
-  selectedFile: File | null = null;
+
   userImages: string[] = [];
   isLoading = false;
   isDeleteModalVisible = false;
   imageToDelete: string | null = null;
-
-  // Propiedades de progreso de carga
-  uploadProgress: number | null = null;
-  uploadedSize = 0;
-  totalSize = 0;
 
   // Propiedades de marca de agua
   private readonly watermarkPositions = [
@@ -91,24 +79,6 @@ export class ImageGridComponent implements OnInit, OnDestroy {
     return this.currentWatermarkPosition;
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files?.length) return;
-
-    const file = input.files[0];
-    if (!file.type.startsWith('image/')) {
-      this.toast.show(
-        'Formato de archivo inválido. Solo se permiten imágenes.',
-        'error'
-      );
-      input.value = '';
-      return;
-    }
-
-    this.selectedFile = file;
-    this.uploadImage();
-  }
-
   deleteImage(imageUrl: string): void {
     this.imageToDelete = imageUrl;
     this.isDeleteModalVisible = true;
@@ -130,7 +100,7 @@ export class ImageGridComponent implements OnInit, OnDestroy {
     return email.replace(/\./g, '_');
   }
 
-  private async loadUserImages(): Promise<void> {
+  private async loadUserImages(addedImageUrl?: string): Promise<void> {
     if (!this.userEmailKey) return;
 
     this.setLoadingState(true);
@@ -139,7 +109,13 @@ export class ImageGridComponent implements OnInit, OnDestroy {
       const userData = await this.firebaseService.getUserData(
         this.userEmailKey
       );
-      const images = userData?.profileData?.multimedia?.galleryImages || [];
+      let images = userData?.profileData?.multimedia?.galleryImages || [];
+
+      // Si se añadió una nueva imagen, asegurarse de que esté en la lista
+      if (addedImageUrl && !images.includes(addedImageUrl)) {
+        images = [...images, addedImageUrl];
+      }
+
       this.userImages = this.sortImagesByDate(images);
     } catch (error) {
       console.error('Error loading images:', error);
@@ -147,6 +123,12 @@ export class ImageGridComponent implements OnInit, OnDestroy {
     } finally {
       this.setLoadingState(false);
     }
+  }
+
+  // método para manejar la finalización de la subida
+  public async handleUploadComplete(imageUrl: string): Promise<void> {
+    await this.updateUserGallery(imageUrl);
+    this.loadUserImages(imageUrl);
   }
 
   private sortImagesByDate(images: string[]): string[] {
@@ -178,56 +160,10 @@ export class ImageGridComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async uploadImage(): Promise<void> {
-    if (!this.selectedFile || !this.userEmailKey || !this.currentUser?.email)
-      return;
-
-    this.setUploadState(true);
-
-    try {
-      await runInInjectionContext(this.injector, async () => {
-        const imageName = `gallery-image-${Date.now()}.${this.selectedFile!.name.split(
-          '.'
-        ).pop()}`;
-        const storagePath = `cv-app/users/${this.userEmailKey}/gallery-images/${imageName}`;
-        const storageRef = ref(this.storage, storagePath);
-        const uploadTask = uploadBytesResumable(storageRef, this.selectedFile!);
-
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => this.updateUploadProgress(snapshot),
-          (error) => this.handleUploadError(error),
-          async () => await this.handleUploadComplete(uploadTask)
-        );
-      });
-    } catch (error) {
-      this.handleUploadError(error);
-    }
-  }
-
-  private updateUploadProgress(snapshot: any): void {
-    this.ngZone.run(() => {
-      this.uploadedSize = snapshot.bytesTransferred;
-      this.totalSize = snapshot.totalBytes;
-      this.uploadProgress = Math.round(
-        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-      );
-      this.cdr.detectChanges();
-    });
-  }
-
-  private async handleUploadComplete(uploadTask: any): Promise<void> {
-    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-    await this.updateUserGallery(downloadURL);
-    this.ngZone.run(() => {
-      this.toast.show('Imagen subida exitosamente', 'success');
-      this.loadUserImages();
-      this.resetUploadState();
-    });
-  }
-
   private async updateUserGallery(imageUrl: string): Promise<void> {
-    const userData = await this.firebaseService.getUserData(this.userEmailKey!);
+    if (!this.userEmailKey || !this.currentUser?.email) return;
+
+    const userData = await this.firebaseService.getUserData(this.userEmailKey);
     const updatedData = {
       profileData: {
         ...(userData?.profileData || {}),
@@ -241,17 +177,9 @@ export class ImageGridComponent implements OnInit, OnDestroy {
       },
     };
     await this.firebaseService.updateUserData(
-      this.currentUser!.email!,
+      this.currentUser.email,
       updatedData
     );
-  }
-
-  private handleUploadError(error: any): void {
-    this.ngZone.run(() => {
-      console.error('Upload error:', error);
-      this.toast.show('Error al subir la imagen', 'error');
-      this.resetUploadState();
-    });
   }
 
   private setLoadingState(isLoading: boolean): void {
@@ -259,21 +187,6 @@ export class ImageGridComponent implements OnInit, OnDestroy {
       this.isLoading = isLoading;
       this.cdr.detectChanges();
     });
-  }
-
-  private setUploadState(isUploading: boolean): void {
-    this.ngZone.run(() => {
-      this.isLoading = isUploading;
-      this.uploadProgress = isUploading ? 0 : null;
-      this.uploadedSize = 0;
-      this.totalSize = isUploading ? this.selectedFile?.size || 0 : 0;
-      this.cdr.detectChanges();
-    });
-  }
-
-  private resetUploadState(): void {
-    this.setUploadState(false);
-    this.selectedFile = null;
   }
 
   private async performDelete(imageUrl: string): Promise<void> {
