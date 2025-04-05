@@ -1,17 +1,5 @@
+<app-image-info-bar [isLoading]="isLoading" [userImages]="userImages"></app-image-info-bar>
 <div class="image-grid">
-    <div class="gallery-info" *ngIf="!isLoading">
-        <div class="info-text" *ngIf="userImages.length > 0; else noImages">
-            {{ userImages.length }} foto{{ userImages.length > 1 ? 's' : '' }} cargado{{ userImages.length > 1 ? 's' :
-            '' }}
-            <i class="fas fa-info-circle info-icon attention" (click)="showInfoModal()"></i>
-        </div>
-        <ng-template #noImages>
-            <div class="info-text">
-                No hay imágenes cargadas.
-                <i class="fas fa-info-circle info-icon attention" (click)="showInfoModal()"></i>
-            </div>
-        </ng-template>
-    </div>
 
     <!-- Upload Button & Progress -->
     <div class="upload-container">
@@ -60,6 +48,3 @@
     [message]="'¿Estás seguro de que deseas eliminar esta imagen?'" (confirm)="onDeleteConfirmed()"
     (cancel)="onDeleteCanceled()">
 </app-delete-confirm-modal>
-<!-- Modal de información -->
-<app-info-modal [isVisible]="isInfoModalVisible" (closed)="hideInfoModal()">
-</app-info-modal>

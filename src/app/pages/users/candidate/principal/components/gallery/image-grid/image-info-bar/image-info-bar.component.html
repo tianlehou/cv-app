@@ -1,0 +1,14 @@
+<div class="gallery-info" *ngIf="!isLoading">
+    <div>
+        {{ getImageCountText() }}
+        <span style="font-weight: 500; color: var(--clr-blue); margin-left: 10px;">cl</span>
+        <i class="fas fa-info-circle info-icon attention" (click)="showInfoModal()"></i>
+        <span style="font-weight: 500; color: var(--clr-blue);">c</span>
+    </div>
+</div>
+
+<!-- Mover el modal aquí -->
+<app-info-modal 
+    [isVisible]="isInfoModalVisible" 
+    (closed)="hideInfoModal()">
+</app-info-modal>

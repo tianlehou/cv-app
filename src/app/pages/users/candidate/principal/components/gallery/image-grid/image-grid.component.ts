@@ -20,8 +20,8 @@ import {
 import { ToastService } from '../../../../../../../services/toast.service';
 import { FirebaseService } from '../../../../../../../services/firebase.service';
 import { DeleteConfirmModalComponent } from '../../../../../../../components/delete-confirmation-modal/delete-confirmation-modal.component';
-import { InfoModalComponent } from './info-modal/info-modal.component';
 import { FileSizePipe } from '../../../../../../../pipes/filesize.pipe';
+import { ImageInfoBarComponent } from './image-info-bar/image-info-bar.component';
 
 @Component({
   selector: 'app-image-grid',
@@ -31,7 +31,7 @@ import { FileSizePipe } from '../../../../../../../pipes/filesize.pipe';
     DeleteConfirmModalComponent,
     FileSizePipe,
     NgStyle,
-    InfoModalComponent,
+    ImageInfoBarComponent,
   ],
   templateUrl: './image-grid.component.html',
   styleUrls: ['./image-grid.component.css'],
@@ -46,7 +46,6 @@ export class ImageGridComponent implements OnInit, OnDestroy {
   isLoading = false;
   isDeleteModalVisible = false;
   imageToDelete: string | null = null;
-  isInfoModalVisible = false; // propiedad de modal de informacion
 
   // Propiedades de progreso de carga
   uploadProgress: number | null = null;
@@ -90,14 +89,6 @@ export class ImageGridComponent implements OnInit, OnDestroy {
   // Métodos públicos
   getWatermarkPosition(): string {
     return this.currentWatermarkPosition;
-  }
-
-  // métodos del modal de información
-  showInfoModal(): void {
-    this.isInfoModalVisible = true;
-  }
-  hideInfoModal(): void {
-    this.isInfoModalVisible = false;
   }
 
   onFileSelected(event: Event): void {
