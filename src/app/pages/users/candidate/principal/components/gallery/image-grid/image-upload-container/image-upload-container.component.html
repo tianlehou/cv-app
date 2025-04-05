@@ -1,5 +1,5 @@
 <div class="upload-container">
-    <div *ngIf="uploadProgress === null; else progressTemplate" class="upload-button">
+    <div *ngIf="!showProgress; else progressTemplate" class="upload-button">
         <label for="image-upload">
             <i class="fas fa-plus"></i> Subir imagen
         </label>
@@ -7,13 +7,6 @@
             (change)="onFileSelected($event)">
     </div>
     <ng-template #progressTemplate>
-        <div class="upload-progress">
-            <div class="progress-bar" [ngStyle]="{ 'width': uploadProgress + '%' }">
-                {{ uploadProgress }}%
-            </div>
-            <div class="progress-size">
-                {{ uploadedSize | filesize }} de {{ totalSize | filesize }}
-            </div>
-        </div>
+        <app-upload-progress-bar [snapshot]="currentSnapshot"></app-upload-progress-bar>
     </ng-template>
 </div>
