@@ -2,13 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FirebaseService } from '../../../../../../services/firebase.service';
-import { DeleteConfirmModalComponent } from '../../../../../../components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { ConfirmationModalService } from '../../../../../../services/confirmation-modal.service';
 import { User } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-edit-experience',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, DeleteConfirmModalComponent],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './edit-experience.component.html',
   styleUrls: ['./edit-experience.component.css'],
 })
@@ -17,12 +17,12 @@ export class EditExperienceComponent implements OnInit {
   profileForm!: FormGroup;
   userEmail: string | null = null;
   editableFields: { [key: string]: boolean } = {};
-  isDeleteModalVisible = false;
   experienceIndexToDelete: number | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private ConfirmationModalService: ConfirmationModalService
   ) {}
 
   ngOnInit(): void {
@@ -158,19 +158,19 @@ export class EditExperienceComponent implements OnInit {
 
   confirmDeleteExperience(index: number): void {
     this.experienceIndexToDelete = index;
-    this.isDeleteModalVisible = true; // Activa la visibilidad del modal
+    this.ConfirmationModalService.show(
+      {
+        title: 'Eliminar experiencia',
+        message: '¿Estás seguro de que deseas eliminar esta experiencia?'
+      },
+      () => this.onDeleteConfirmed()
+    );
   }
 
   onDeleteConfirmed(): void {
     if (this.experienceIndexToDelete !== null) {
       this.removeExperience(this.experienceIndexToDelete);
     }
-    this.experienceIndexToDelete = null; // Resetea el índice
-    this.isDeleteModalVisible = false; // Cierra el modal
-  }
-
-  onDeleteCanceled(): void {
-    this.experienceIndexToDelete = null; // Resetea el índice
-    this.isDeleteModalVisible = false; // Cierra el modal
+    this.experienceIndexToDelete = null;
   }
 }

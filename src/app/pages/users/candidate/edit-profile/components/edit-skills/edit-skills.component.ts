@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FirebaseService } from '../../../../../../services/firebase.service';
-import { DeleteConfirmModalComponent } from '../../../../../../components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { ConfirmationModalService } from '../../../../../../services/confirmation-modal.service';
 import { User } from '@angular/fire/auth';
 
 @Component({
@@ -16,8 +16,7 @@ import { User } from '@angular/fire/auth';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    CommonModule,
-    DeleteConfirmModalComponent
+    CommonModule
   ],
   templateUrl: './edit-skills.component.html',
   styleUrls: ['./edit-skills.component.css'],
@@ -27,12 +26,12 @@ export class EditSkillsComponent implements OnInit {
   profileForm!: FormGroup;
   userEmail: string | null = null;
   editableFields: { [key: string]: boolean } = {};
-  isDeleteModalVisible: boolean = false;
   skillIndexToDelete: number | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private ConfirmationModalService: ConfirmationModalService
   ) {}
 
   ngOnInit(): void {
@@ -165,7 +164,13 @@ export class EditSkillsComponent implements OnInit {
 
   confirmDeleteSkill(index: number): void {
     this.skillIndexToDelete = index;
-    this.isDeleteModalVisible = true;
+    this.ConfirmationModalService.show(
+      {
+        title: 'Eliminar Habilidad',
+        message: '¿Estás seguro de que deseas eliminar este habilidad?'
+      },
+      () => this.onDeleteConfirmed()
+    );
   }
 
   onDeleteConfirmed(): void {
@@ -173,11 +178,5 @@ export class EditSkillsComponent implements OnInit {
       this.removeSkill(this.skillIndexToDelete);
     }
     this.skillIndexToDelete = null;
-    this.isDeleteModalVisible = false;
-  }
-
-  onDeleteCanceled(): void {
-    this.skillIndexToDelete = null;
-    this.isDeleteModalVisible = false;
   }
 }

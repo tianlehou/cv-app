@@ -1,5 +1,4 @@
 <div class="profile-container">
-
   <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
 
     <!-- Experiencia -->
@@ -56,11 +55,5 @@
         </div>
       </div>
     </div>
-
   </form>
 </div>
-
-<app-delete-confirm-modal [isVisible]="isDeleteModalVisible" [title]="'Eliminar experiencia'"
-  [message]="'¿Estás seguro de que deseas eliminar esta experiencia?'" (confirm)="onDeleteConfirmed()"
-  (cancel)="onDeleteCanceled()">
-</app-delete-confirm-modal>

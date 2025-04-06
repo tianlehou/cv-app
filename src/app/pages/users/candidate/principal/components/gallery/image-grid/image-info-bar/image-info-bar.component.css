@@ -29,9 +29,10 @@
 }
 
 @keyframes attention {
-    0%, 30% { transform: translateX(0) rotate(0deg); }
-    10% { transform: translateX(-150px) rotate(-90deg); }
-    20% { transform: translateX(25px) rotate(90deg); }
+    0%, 35% { transform: translateX(0) rotate(0deg); }
+    10% { transform: translateX(25px) rotate(45deg); }
+    20% { transform: translateX(-150px) rotate(-90deg); }
+    30% { transform: translateX(15px) rotate(90deg); }
 }
 
 .info-icon.attention {

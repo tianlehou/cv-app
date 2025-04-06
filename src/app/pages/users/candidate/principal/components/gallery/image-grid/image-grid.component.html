@@ -1,33 +1,16 @@
 <app-image-info-bar [isLoading]="isLoading" [userImages]="userImages"></app-image-info-bar>
-<div class="image-grid">
 
+<div class="image-grid">
     <!-- Upload Button & Progress Bar -->
     <app-image-upload-container [userEmailKey]="userEmailKey" (uploadComplete)="handleUploadComplete($event)">
     </app-image-upload-container>
 
-    <!-- Images Grid -->
-    <div *ngFor="let image of userImages" class="image-item" (contextmenu)="false" draggable="false"
-        ondrop="return false;">
-        <img [src]="image" alt="User uploaded image" draggable="false">
-        <div class="watermark" [ngClass]="getWatermarkPosition()" [style.opacity]="watermarkOpacity">
-            <div class="watermark-content">
-                <i class="fas fa-user-circle"></i>
-                <span>cv-app dinamic-watermark</span>
-            </div>
-        </div>
-        <button class="delete-button" (click)="deleteImage(image)">
-            <i class="fas fa-trash"></i>
-        </button>
-    </div>
+    <!-- Images Item Container -->
+    <app-image-item-container *ngFor="let image of userImages" [imageUrl]="image" [currentUser]="currentUser"
+        [userEmailKey]="userEmailKey" (imageDeleted)="onImageDeleted($event)"></app-image-item-container>
 
     <!-- Loading State -->
     <div *ngIf="isLoading" class="loading-spinner">
         <i class="fas fa-spinner fa-spin"></i>
     </div>
 </div>
-
-<!-- Modal de confirmación -->
-<app-delete-confirm-modal [isVisible]="isDeleteModalVisible" [title]="'Eliminar Imagen'"
-    [message]="'¿Estás seguro de que deseas eliminar esta imagen?'" (confirm)="onDeleteConfirmed()"
-    (cancel)="onDeleteCanceled()">
-</app-delete-confirm-modal>

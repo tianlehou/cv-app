@@ -23,13 +23,13 @@ import {
 } from '@angular/fire/storage';
 import { ToastService } from '../../../../../../../services/toast.service';
 import { FirebaseService } from '../../../../../../../services/firebase.service';
-import { DeleteConfirmModalComponent } from '../../../../../../../components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { ConfirmationModalService } from '../../../../../../../services/confirmation-modal.service';
 import { FileSizePipe } from '../../../../../../../pipes/filesize.pipe';
 
 @Component({
   selector: 'app-video-grid',
   standalone: true,
-  imports: [CommonModule, DeleteConfirmModalComponent, FileSizePipe, NgStyle],
+  imports: [CommonModule, FileSizePipe, NgStyle],
   templateUrl: './video-grid.component.html',
   styleUrls: ['./video-grid.component.css'],
 })
@@ -42,7 +42,6 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
   selectedFile: File | null = null;
   userVideos: string[] = [];
   isLoading = false;
-  isDeleteModalVisible = false;
   videoToDelete: string | null = null;
   expandedStates: { [videoUrl: string]: boolean } = {};
   totalUploadedMB: number = 0;
@@ -58,7 +57,8 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
     private firebaseService: FirebaseService,
     private ngZone: NgZone,
     private storage: Storage,
-    private toast: ToastService
+    private toast: ToastService,
+    private ConfirmationModalService: ConfirmationModalService
   ) {}
 
   ngOnInit(): void {
@@ -297,20 +297,22 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
     });
   }
 
-  deleteVideo(videoUrl: string): void {
+  // Método para cancelar la carga de un video
+  confirmDeleteVideo(videoUrl: string): void {
     this.videoToDelete = videoUrl;
-    this.isDeleteModalVisible = true;
+    this.ConfirmationModalService.show(
+      {
+        title: 'Eliminar Video',
+        message: '¿Estás seguro de que deseas eliminar este video?'
+      },
+      () => this.onDeleteConfirmed()
+    );
   }
 
   onDeleteConfirmed(): void {
-    if (!this.videoToDelete) return;
-    this.performDelete(this.videoToDelete);
-    this.isDeleteModalVisible = false;
-    this.videoToDelete = null;
-  }
-
-  onDeleteCanceled(): void {
-    this.isDeleteModalVisible = false;
+    if (this.videoToDelete) {
+      this.performDelete(this.videoToDelete);
+    }
     this.videoToDelete = null;
   }
 

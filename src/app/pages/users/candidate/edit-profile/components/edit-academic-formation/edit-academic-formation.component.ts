@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FirebaseService } from '../../../../../../services/firebase.service';
-import { DeleteConfirmModalComponent } from '../../../../../../components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { ConfirmationModalService } from '../../../../../../services/confirmation-modal.service';
 import { User } from '@angular/fire/auth';
 
 @Component({
@@ -17,7 +17,6 @@ import { User } from '@angular/fire/auth';
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    DeleteConfirmModalComponent,
   ],
   templateUrl: './edit-academic-formation.component.html',
   styleUrls: ['./edit-academic-formation.component.css'],
@@ -27,12 +26,12 @@ export class EditAcademicFormationComponent implements OnInit {
   profileForm!: FormGroup;
   userEmail: string | null = null;
   editableFields: { [key: string]: boolean } = {};
-  isDeleteModalVisible: boolean = false;
   academicFormationIndexToDelete: number | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private ConfirmationModalService: ConfirmationModalService
   ) {}
 
   ngOnInit(): void {
@@ -165,7 +164,13 @@ export class EditAcademicFormationComponent implements OnInit {
 
   confirmDeleteAcademicFormation(index: number): void {
     this.academicFormationIndexToDelete = index;
-    this.isDeleteModalVisible = true;
+    this.ConfirmationModalService.show(
+      {
+        title: 'Eliminar Formación Académica',
+        message: '¿Estás seguro de que deseas eliminar esta formación académica?'
+      },
+      () => this.onDeleteConfirmed()
+    );
   }
 
   onDeleteConfirmed(): void {
@@ -173,11 +178,5 @@ export class EditAcademicFormationComponent implements OnInit {
       this.removeAcademicFormation(this.academicFormationIndexToDelete);
     }
     this.academicFormationIndexToDelete = null;
-    this.isDeleteModalVisible = false;
-  }
-
-  onDeleteCanceled(): void {
-    this.academicFormationIndexToDelete = null;
-    this.isDeleteModalVisible = false;
   }
 }

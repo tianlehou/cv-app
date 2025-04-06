@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FirebaseService } from '../../../../../../services/firebase.service';
-import { DeleteConfirmModalComponent } from '../../../../../../components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { ConfirmationModalService } from '../../../../../../services/confirmation-modal.service';
 import { User } from '@angular/fire/auth';
 
 @Component({
@@ -17,7 +17,6 @@ import { User } from '@angular/fire/auth';
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    DeleteConfirmModalComponent,
   ],
   templateUrl: './edit-languages.component.html',
   styleUrls: ['./edit-languages.component.css'],
@@ -27,12 +26,12 @@ export class EditLanguagesComponent implements OnInit {
   profileForm!: FormGroup;
   userEmail: string | null = null;
   editableFields: { [key: string]: boolean } = {};
-  isDeleteModalVisible: boolean = false;
   languageIndexToDelete: number | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private ConfirmationModalService: ConfirmationModalService
   ) {}
 
   ngOnInit(): void {
@@ -165,7 +164,13 @@ export class EditLanguagesComponent implements OnInit {
 
   confirmDeleteLanguage(index: number): void {
     this.languageIndexToDelete = index;
-    this.isDeleteModalVisible = true;
+    this.ConfirmationModalService.show(
+      {
+        title: 'Eliminar Idioma',
+        message: '¿Estás seguro de que deseas eliminar este idioma?'
+      },
+      () => this.onDeleteConfirmed()
+    );
   }
 
   onDeleteConfirmed(): void {
@@ -173,11 +178,5 @@ export class EditLanguagesComponent implements OnInit {
       this.removeLanguage(this.languageIndexToDelete);
     }
     this.languageIndexToDelete = null;
-    this.isDeleteModalVisible = false;
-  }
-
-  onDeleteCanceled(): void {
-    this.languageIndexToDelete = null;
-    this.isDeleteModalVisible = false;
   }
 }

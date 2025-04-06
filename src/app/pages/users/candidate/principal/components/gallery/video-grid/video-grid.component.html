@@ -33,7 +33,7 @@
         <button class="toggle-button" (click)="toggleExpansion(video)">
             <i class="fas" [ngClass]="expandedStates[video] ? 'fa-compress' : 'fa-expand'"></i>
         </button>
-        <button class="delete-button" (click)="deleteVideo(video)">
+        <button class="delete-button" (click)="confirmDeleteVideo(video)">
             <i class="fas fa-trash"></i>
         </button>
     </div>
@@ -43,9 +43,3 @@
         <i class="fas fa-spinner fa-spin"></i>
     </div>
 </div>
-
-<!-- Modal de confirmación -->
-<app-delete-confirm-modal [isVisible]="isDeleteModalVisible" [title]="'Eliminar Video'"
-    [message]="'¿Estás seguro de que deseas eliminar este video?'" (confirm)="onDeleteConfirmed()"
-    (cancel)="onDeleteCanceled()">
-</app-delete-confirm-modal>
