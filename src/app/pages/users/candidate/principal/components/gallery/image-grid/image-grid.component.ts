@@ -4,7 +4,7 @@ import {
   OnInit,
   Input,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { User } from '@angular/fire/auth';
@@ -34,7 +34,7 @@ export class ImageGridComponent implements OnInit, OnDestroy {
   constructor(
     private firebaseService: FirebaseService,
     private toast: ToastService,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -47,12 +47,12 @@ export class ImageGridComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   public async handleUploadComplete(imageUrl: string): Promise<void> {
-    await this.updateUserGallery(imageUrl);
+    await this.updateUserImages(imageUrl);
     this.loadUserImages(imageUrl);
   }
 
   public onImageDeleted(deletedImageUrl: string): void {
-    this.userImages = this.userImages.filter(img => img !== deletedImageUrl);
+    this.userImages = this.userImages.filter((img) => img !== deletedImageUrl);
     this.cdr.detectChanges();
   }
 
@@ -64,7 +64,9 @@ export class ImageGridComponent implements OnInit, OnDestroy {
     if (!this.userEmailKey) return;
 
     try {
-      const userData = await this.firebaseService.getUserData(this.userEmailKey);
+      const userData = await this.firebaseService.getUserData(
+        this.userEmailKey
+      );
       let images = userData?.profileData?.multimedia?.galleryImages || [];
 
       if (addedImageUrl && !images.includes(addedImageUrl)) {
@@ -90,22 +92,25 @@ export class ImageGridComponent implements OnInit, OnDestroy {
     });
   }
 
-  private async updateUserGallery(imageUrl: string): Promise<void> {
+  private async updateUserImages(imageUrl: string): Promise<void> {
     if (!this.userEmailKey || !this.currentUser?.email) return;
 
-    const userData = await this.firebaseService.getUserData(this.userEmailKey);
+    const currentData = await this.firebaseService.getUserData(this.userEmailKey);
     const updatedData = {
       profileData: {
-        ...(userData?.profileData || {}),
+        ...(currentData?.profileData || {}),
         multimedia: {
-          ...(userData?.profileData?.multimedia || {}),
+          ...(currentData?.profileData?.multimedia || {}),
           galleryImages: [
-            ...(userData?.profileData?.multimedia?.galleryImages || []),
+            ...(currentData?.profileData?.multimedia?.galleryImages || []),
             imageUrl,
           ],
         },
       },
     };
-    await this.firebaseService.updateUserData(this.currentUser.email, updatedData);
+    await this.firebaseService.updateUserData(
+      this.currentUser.email,
+      updatedData
+    );
   }
 }

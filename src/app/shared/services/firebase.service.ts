@@ -128,8 +128,8 @@ export class FirebaseService {
           picture?: {
             profilePicture?: string;
           };
-          galleryImages?: string;
-          galleryVideos?: string;
+          galleryImages?: string[];
+          galleryVideos?: string[];
         };
         personalData?: string;
         skills?: string;
