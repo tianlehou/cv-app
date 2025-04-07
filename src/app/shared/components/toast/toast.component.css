@@ -10,14 +10,17 @@
 
 .toast {
     position: relative;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    min-width: 300px;
-    padding: 15px 20px;
+    padding: 8px 12px;
+    font-size: 12px;
     border-radius: 8px;
     color: var(--clr-white);
     animation: slideIn 1s ease-out;
     overflow: hidden;
+    width: fit-content;
+    max-width: 90vw;
+    word-break: break-word;
 }
 
 .toast::after {
@@ -70,17 +73,4 @@
 .toast i {
     margin-right: 10px;
     font-size: 1.2rem;
-}
-
-.toast-message {
-    flex-grow: 1;
-}
-
-.toast-close {
-    background: none;
-    border: none;
-    color: inherit;
-    margin-left: 15px;
-    cursor: pointer;
-    padding: 0 5px;
 }

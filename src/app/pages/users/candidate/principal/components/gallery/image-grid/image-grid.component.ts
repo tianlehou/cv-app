@@ -4,13 +4,12 @@ import {
   OnInit,
   Input,
   OnDestroy,
-  ChangeDetectorRef,
-  NgZone,
+  ChangeDetectorRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { User } from '@angular/fire/auth';
-import { ToastService } from '../../../../../../../services/toast.service';
-import { FirebaseService } from '../../../../../../../services/firebase.service';
+import { ToastService } from '../../../../../../../shared/services/toast.service';
+import { FirebaseService } from '../../../../../../../shared/services/firebase.service';
 import { ImageInfoBarComponent } from './image-info-bar/image-info-bar.component';
 import { ImageUploadButtonComponent } from './image-upload-button/image-upload-button.component';
 import { ImageItemContainerComponent } from './image-item-container/image-item-container.component';
@@ -29,16 +28,13 @@ import { ImageItemContainerComponent } from './image-item-container/image-item-c
 })
 export class ImageGridComponent implements OnInit, OnDestroy {
   @Input() currentUser: User | null = null;
-
   userEmailKey: string | null = null;
   userImages: string[] = [];
-  isLoading = false;
 
   constructor(
     private firebaseService: FirebaseService,
     private toast: ToastService,
     private cdr: ChangeDetectorRef,
-    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -67,8 +63,6 @@ export class ImageGridComponent implements OnInit, OnDestroy {
   private async loadUserImages(addedImageUrl?: string): Promise<void> {
     if (!this.userEmailKey) return;
 
-    this.setLoadingState(true);
-
     try {
       const userData = await this.firebaseService.getUserData(this.userEmailKey);
       let images = userData?.profileData?.multimedia?.galleryImages || [];
@@ -82,8 +76,6 @@ export class ImageGridComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error loading images:', error);
       this.toast.show('Error cargando imágenes', 'error');
-    } finally {
-      this.setLoadingState(false);
     }
   }
 
@@ -115,12 +107,5 @@ export class ImageGridComponent implements OnInit, OnDestroy {
       },
     };
     await this.firebaseService.updateUserData(this.currentUser.email, updatedData);
-  }
-
-  private setLoadingState(isLoading: boolean): void {
-    this.ngZone.run(() => {
-      this.isLoading = isLoading;
-      this.cdr.detectChanges();
-    });
   }
 }

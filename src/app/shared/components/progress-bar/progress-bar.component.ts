@@ -8,16 +8,16 @@ import {
   inject,
 } from '@angular/core';
 import { CommonModule, NgStyle } from '@angular/common';
-import { FileSizePipe } from '../../../../../../../../pipes/filesize.pipe';
+import { FileSizePipe } from '../../pipes/filesize.pipe';
 
 @Component({
-  selector: 'app-upload-progress-bar',
+  selector: 'app-progress-bar',
   standalone: true,
   imports: [CommonModule, FileSizePipe, NgStyle],
-  templateUrl: './upload-progress-bar.component.html',
-  styleUrl: './upload-progress-bar.component.css',
+  templateUrl: './progress-bar.component.html',
+  styleUrl: './progress-bar.component.css',
 })
-export class UploadProgressBarComponent implements OnChanges {
+export class ProgressBarComponent implements OnChanges {
   @Input() snapshot: any;
 
   uploadProgress: number | null = null;

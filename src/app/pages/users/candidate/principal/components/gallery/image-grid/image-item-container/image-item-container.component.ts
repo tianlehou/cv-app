@@ -2,8 +2,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, inject, NgZone } from '@angular/core';
 import { Storage, ref, deleteObject } from '@angular/fire/storage';
-import { ToastService } from '../../../../../../../../services/toast.service';
-import { FirebaseService } from '../../../../../../../../services/firebase.service';
+import { ToastService } from '../../../../../../../../shared/services/toast.service';
+import { FirebaseService } from '../../../../../../../../shared/services/firebase.service';
 import { User } from '@angular/fire/auth';
 import { EnvironmentInjector } from '@angular/core';
 import { runInInjectionContext } from '@angular/core';

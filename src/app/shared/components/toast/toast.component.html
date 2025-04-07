@@ -3,8 +3,5 @@
         [style.--duration]="toast.duration + 'ms'">
         <i class="{{ getIcon(toast.type) }}"></i>
         <span class="toast-message">{{ toast.message }}</span>
-        <button class="toast-close" (click)="toastService.dismiss(toast.id)">
-            &times;
-        </button>
     </div>
 </div>

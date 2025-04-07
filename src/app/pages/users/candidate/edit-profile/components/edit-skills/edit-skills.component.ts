@@ -7,8 +7,8 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FirebaseService } from '../../../../../../services/firebase.service';
-import { ConfirmationModalService } from '../../../../../../services/confirmation-modal.service';
+import { FirebaseService } from '../../../../../../shared/services/firebase.service';
+import { ConfirmationModalService } from '../../../../../../shared/services/confirmation-modal.service';
 import { User } from '@angular/fire/auth';
 
 @Component({

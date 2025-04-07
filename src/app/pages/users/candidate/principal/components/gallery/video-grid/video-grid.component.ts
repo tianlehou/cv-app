@@ -21,10 +21,10 @@ import {
   uploadBytesResumable,
   getMetadata
 } from '@angular/fire/storage';
-import { ToastService } from '../../../../../../../services/toast.service';
-import { FirebaseService } from '../../../../../../../services/firebase.service';
-import { ConfirmationModalService } from '../../../../../../../services/confirmation-modal.service';
-import { FileSizePipe } from '../../../../../../../pipes/filesize.pipe';
+import { ToastService } from '../../../../../../../shared/services/toast.service';
+import { FirebaseService } from '../../../../../../../shared/services/firebase.service';
+import { ConfirmationModalService } from '../../../../../../../shared/services/confirmation-modal.service';
+import { FileSizePipe } from '../../../../../../../shared/pipes/filesize.pipe';
 
 @Component({
   selector: 'app-video-grid',

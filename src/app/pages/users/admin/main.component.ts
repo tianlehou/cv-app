@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FirebaseService } from '../../../services/firebase.service';
-import { SidebarComponent } from '../../../components/buttons/sidebar/sidebar.component';
+import { FirebaseService } from '../../../shared/services/firebase.service';
+import { SidebarComponent } from '../../../shared/components/buttons/sidebar/sidebar.component';
 import { AdminDashboardComponent } from './dashboard/dashboard.component';
 
 @Component({

@@ -17,7 +17,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from '@angular/fire/storage';
-import { ToastService } from '../../../../../../../../services/toast.service';
+import { ToastService } from '../../../../../../../../shared/services/toast.service';
 import { runInInjectionContext } from '@angular/core';
 
 @Component({

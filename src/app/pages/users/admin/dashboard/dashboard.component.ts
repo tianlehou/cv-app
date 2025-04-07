@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { get, ref, update } from 'firebase/database';
-import { FirebaseService } from '../../../../services/firebase.service';
+import { FirebaseService } from '../../../../shared/services/firebase.service';
 import { PaginationComponent } from '../pagination/pagination.component';
 
 @Component({

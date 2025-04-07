@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ToastComponent } from './components/toast/toast.component';
-import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
+import { ToastComponent } from './shared/components/toast/toast.component';
+import { ConfirmationModalComponent } from './shared/components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-root',

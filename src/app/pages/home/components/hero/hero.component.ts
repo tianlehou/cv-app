@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CustomButtonComponent } from '../../../../components/buttons/custom-button/custom-button.component';
+import { CustomButtonComponent } from '../../../../shared/components/buttons/custom-button/custom-button.component';
 import { UserTypeModalComponent } from '../../user-type-modal/user-type-modal.component';
 
 @Component({

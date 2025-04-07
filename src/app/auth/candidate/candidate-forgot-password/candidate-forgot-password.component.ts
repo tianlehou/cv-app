@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FirebaseService } from '../../../services/firebase.service';
+import { FirebaseService } from '../../../shared/services/firebase.service';
 
 @Component({
   selector: 'app-candidate-forgot-password',

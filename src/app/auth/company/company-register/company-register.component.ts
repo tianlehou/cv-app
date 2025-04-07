@@ -6,7 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { FirebaseService } from '../../../services/firebase.service';
+import { FirebaseService } from '../../../shared/services/firebase.service';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
-import { ConfirmationModalService } from '../../../../../../../../../services/confirmation-modal.service';
+import { ConfirmationModalService } from '../../../../../../../../../shared/services/confirmation-modal.service';
 
 @Component({
   selector: 'app-delete-button',

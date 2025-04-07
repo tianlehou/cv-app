@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FirebaseService } from '../../../../services/firebase.service';
+import { FirebaseService } from '../../../../shared/services/firebase.service';
 
 // components
-import { CustomButtonComponent } from '../../../../components/buttons/custom-button/custom-button.component';
+import { CustomButtonComponent } from '../../../../shared/components/buttons/custom-button/custom-button.component';
 import { EditProfilePictureComponent } from './components/edit-profile-picture/edit-profile-picture.component';
 import { EditPersonalDataComponent } from './components/edit-personal-data/edit-personal-data.component';
 import { EditExperienceComponent } from './components/edit-experience/edit-experience.component';
