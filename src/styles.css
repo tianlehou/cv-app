@@ -33,6 +33,7 @@
 
 body,
 footer {
+    color: var(--text-color);
     font-family: "Poppins", sans-serif;
 }
 

@@ -19,16 +19,15 @@ import {
 } from '@angular/fire/storage';
 import { ToastService } from '../../../../../../../../services/toast.service';
 import { runInInjectionContext } from '@angular/core';
-import { UploadProgressBarComponent } from './upload-progress-bar/upload-progress-bar.component';
 
 @Component({
-  selector: 'app-image-upload-container',
+  selector: 'app-image-upload-button',
   standalone: true,
-  imports: [CommonModule, UploadProgressBarComponent],
-  templateUrl: './image-upload-container.component.html',
-  styleUrls: ['./image-upload-container.component.css'],
+  imports: [CommonModule],
+  templateUrl: './image-upload-button.component.html',
+  styleUrls: ['./image-upload-button.component.css'],
 })
-export class ImageUploadContainerComponent implements OnDestroy {
+export class ImageUploadButtonComponent implements OnDestroy {
   @Input() userEmailKey: string | null = null;
   @Output() uploadComplete = new EventEmitter<string>();
 

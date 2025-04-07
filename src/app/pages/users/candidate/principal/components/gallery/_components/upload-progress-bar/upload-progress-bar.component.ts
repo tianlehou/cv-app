@@ -8,7 +8,7 @@ import {
   inject,
 } from '@angular/core';
 import { CommonModule, NgStyle } from '@angular/common';
-import { FileSizePipe } from '../../../../../../../../../pipes/filesize.pipe';
+import { FileSizePipe } from '../../../../../../../../pipes/filesize.pipe';
 
 @Component({
   selector: 'app-upload-progress-bar',

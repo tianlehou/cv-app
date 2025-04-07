@@ -12,7 +12,7 @@ import { User } from '@angular/fire/auth';
 import { ToastService } from '../../../../../../../services/toast.service';
 import { FirebaseService } from '../../../../../../../services/firebase.service';
 import { ImageInfoBarComponent } from './image-info-bar/image-info-bar.component';
-import { ImageUploadContainerComponent } from './image-upload-container/image-upload-container.component';
+import { ImageUploadButtonComponent } from './image-upload-button/image-upload-button.component';
 import { ImageItemContainerComponent } from './image-item-container/image-item-container.component';
 
 @Component({
@@ -21,7 +21,7 @@ import { ImageItemContainerComponent } from './image-item-container/image-item-c
   imports: [
     CommonModule,
     ImageInfoBarComponent,
-    ImageUploadContainerComponent,
+    ImageUploadButtonComponent,
     ImageItemContainerComponent,
   ],
   templateUrl: './image-grid.component.html',
