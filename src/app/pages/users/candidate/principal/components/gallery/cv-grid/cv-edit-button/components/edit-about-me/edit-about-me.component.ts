@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FirebaseService } from '../../../../../../../../../../shared/services/firebase.service';
 import { User } from '@angular/fire/auth';
 import { AboutMeInfoComponent } from './about-me-info/about-me-info.component';
+import { ToastService } from '../../../../../../../../../../shared/services/toast.service';
+import { ConfirmationModalService } from '../../../../../../../../../../shared/services/confirmation-modal.service';
 
 @Component({
   selector: 'app-edit-about-me',
@@ -14,18 +16,19 @@ import { AboutMeInfoComponent } from './about-me-info/about-me-info.component';
 })
 export class EditAboutMeComponent implements OnInit {
   @Input() currentUser: User | null = null;
-  userEmail: string | null = null;
   profileForm!: FormGroup;
+  userEmail: string | null = null;
   editableFields: { [key: string]: boolean } = {};
   isFormDirty = false;
-  originalData: { [key: string]: any } = {};
   showSaveButton = false;
+  originalData: { [key: string]: any } = {};
   showInfoComponent = false;
 
-  // Constructor del componente
   constructor(
     private fb: FormBuilder,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private toastService: ToastService,
+    private confirmationModal: ConfirmationModalService
   ) {}
 
   // Método de inicialización del componente
@@ -38,7 +41,7 @@ export class EditAboutMeComponent implements OnInit {
       this.userEmail = this.currentUser.email.replace(/\./g, '_');
       this.loadUserData();
     } else {
-      console.error('Usuario no autenticado o sin email');
+      this.toastService.show('Usuario no autenticado o sin email', 'error');
     }
 
     // Detectar cambios en el formulario
@@ -47,11 +50,9 @@ export class EditAboutMeComponent implements OnInit {
 
       // Mostrar u ocultar el botón de guardar basado en cambios válidos
       if (this.editableFields['aboutMe']) {
-        this.showSaveButton =
-          this.isFormDirty &&
-          this.profileForm.valid &&
-          this.profileForm.get('aboutMe')?.value !==
-            this.originalData['aboutMe'];
+        this.showSaveButton = this.isFormDirty && 
+                            this.profileForm.valid && 
+                            this.profileForm.get('aboutMe')?.value !== this.originalData['aboutMe'];
       }
     });
   }
@@ -66,14 +67,14 @@ export class EditAboutMeComponent implements OnInit {
   // Método para establecer los campos editables
   private setEditableFields(): void {
     this.editableFields = {
-      aboutMe: false,
+      aboutMe: false
     };
   }
 
   // Método para cargar los datos del usuario
   private async loadUserData(): Promise<void> {
     if (!this.userEmail) {
-      console.error('Error: Usuario no autenticado.');
+      this.toastService.show('Error: Usuario no autenticado', 'error');
       return;
     }
 
@@ -88,7 +89,8 @@ export class EditAboutMeComponent implements OnInit {
       this.profileForm.markAsPristine(); // Reinicia el estado "dirty"
       this.isFormDirty = false;
     } catch (error) {
-      console.error('Error al cargar los datos del usuario:', error);
+      console.error('Error al cargar datos:', error);
+      this.toastService.show('Error al cargar los datos del usuario', 'error');
     }
   }
 
@@ -100,9 +102,7 @@ export class EditAboutMeComponent implements OnInit {
       ) as HTMLTextAreaElement;
       if (textarea) {
         this.adjustTextareaHeight(textarea);
-        textarea.addEventListener('input', () =>
-          this.adjustTextareaHeight(textarea)
-        );
+        textarea.addEventListener('input', () => this.adjustTextareaHeight(textarea));
       }
     }
   }
@@ -116,6 +116,7 @@ export class EditAboutMeComponent implements OnInit {
   // Método para alternar el modo de edición
   toggleEdit(field: string): void {
     this.editableFields[field] = !this.editableFields[field];
+
     if (this.editableFields[field]) {
       // Modo edición activado
       this.showSaveButton = false; // Inicialmente oculto hasta que haya cambios
@@ -134,43 +135,52 @@ export class EditAboutMeComponent implements OnInit {
   async onSubmit(): Promise<void> {
     // Verificación en capas para mejor depuración
     if (!this.userEmail) {
-      console.error('Intento de guardado sin usuario autenticado');
-      alert('Debes iniciar sesión para guardar cambios');
+      this.toastService.show('Debes iniciar sesión para guardar cambios', 'error');
       return;
     }
 
     // Validación del formulario
     if (!this.profileForm.valid) {
-      console.error('Formulario inválido al intentar guardar');
-      alert(
-        'Por favor completa el campo "Sobre mí" correctamente (mínimo 10 caracteres)'
+      this.toastService.show(
+        'Por favor completa el campo "Sobre mí" correctamente (mínimo 10 caracteres)',
+        'error'
       );
       return;
     }
 
     // Verificar si hay cambios reales
-    if (
-      !this.isFormDirty ||
-      this.profileForm.get('aboutMe')?.value === this.originalData['aboutMe']
-    ) {
-      console.log('Guardado evitado: sin cambios reales');
+    if (!this.isFormDirty || this.profileForm.get('aboutMe')?.value === this.originalData['aboutMe']) {
       return;
     }
 
+        // Mostrar modal de confirmación antes de guardar
+    this.confirmationModal.show(
+      {
+        title: 'Confirmar cambios',
+        message: '¿Estás seguro que deseas guardar los cambios en tu información "Sobre mí"?',
+        confirmText: 'Guardar',
+        cancelText: 'Cancelar'
+      },
+      () => this.saveChanges(),
+      () => this.toastService.show('Guardado cancelado', 'info')
+    );
+  }
+
+  private async saveChanges(): Promise<void> {
     try {
       // Obtener los datos actuales de profileData
-      const userData = await this.firebaseService.getUserData(this.userEmail);
+      const userData = await this.firebaseService.getUserData(this.userEmail!);
       const currentProfileData = userData?.profileData || {};
 
       // Actualizar únicamente el campo aboutMe
       const updatedProfileData = {
         ...currentProfileData,
-        aboutMe: this.profileForm.value.aboutMe,
+        aboutMe: this.profileForm.value.aboutMe
       };
 
       // Guardar los datos actualizados en la base de datos
-      await this.firebaseService.updateUserData(this.userEmail, {
-        profileData: updatedProfileData,
+      await this.firebaseService.updateUserData(this.userEmail!, {
+        profileData: updatedProfileData
       });
 
       // Actualizar el estado interno después del guardado exitoso
@@ -180,11 +190,13 @@ export class EditAboutMeComponent implements OnInit {
       this.editableFields['aboutMe'] = false;
       this.showSaveButton = false;
 
-      console.log('Datos guardados exitosamente');
-      alert('Tu información se ha guardado correctamente');
+      this.toastService.show('Tu información se ha guardado correctamente', 'success');
     } catch (error) {
-      console.error('Error en la operación de guardado:', error);
-      alert('Ocurrió un error al guardar. Por favor intenta nuevamente.');
+      console.error('Error al guardar:', error);
+      this.toastService.show(
+        'Ocurrió un error al guardar. Por favor intenta nuevamente.',
+        'error'
+      );
     }
   }
 
