@@ -33,7 +33,7 @@ section::after {
 
 header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex;
     align-items: center;
     background-image: url('../../../../../assets/banner.webp');
     background-size: cover;

@@ -3,6 +3,7 @@ import { User } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { CvInfoBarComponent } from './cv-info-bar/cv-info-bar.component';
 import { CvEditButtonComponent } from './cv-edit-button/cv-edit-button.component';
+import { CurriculumTypesInfoComponent } from './cv-info-bar/curriculum-types-info/curriculum-types-info.component';
 import { EditAboutMeComponent } from './cv-edit-button/components/edit-about-me/edit-about-me.component';
 import { EditAcademicFormationComponent } from './cv-edit-button/components/edit-academic-formation/edit-academic-formation.component';
 import { EditExperienceComponent } from './cv-edit-button/components/edit-experience/edit-experience.component';
@@ -18,6 +19,7 @@ import { EditSkillsComponent } from './cv-edit-button/components/edit-skills/edi
     CommonModule,
     CvInfoBarComponent,
     CvEditButtonComponent,
+    CurriculumTypesInfoComponent,
     EditAboutMeComponent,
     EditAcademicFormationComponent,
     EditExperienceComponent,
@@ -33,6 +35,7 @@ export class CvGridComponent implements OnInit {
   @Input() currentUser: User | null = null;
   userEmailKey: string | null = null;
   selectedComponent: string | null = null;
+  showGalleryGrid = false; // propiedad para controlar la visibilidad
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -48,13 +51,19 @@ export class CvGridComponent implements OnInit {
 
   onOptionSelected(option: string) {
     this.selectedComponent = option;
+    this.showGalleryGrid = true; // Mostrar gallery-grid cuando se selecciona una opción
     this.cdr.detectChanges();
   }
 
+  // Método para determinar si se debe mostrar un componente específico
   shouldShowComponent(componentName: string): boolean {
-    return (
-      this.selectedComponent === componentName ||
-      this.selectedComponent === null
-    );
+    return this.selectedComponent === componentName;
+  }
+
+  // Método para cerrar el popover y restablecer la vista
+  resetView() {
+    this.selectedComponent = null;
+    this.showGalleryGrid = false;
+    this.cdr.detectChanges();
   }
 }

@@ -3,7 +3,9 @@
     <app-cv-edit-button (optionSelected)="onOptionSelected($event)"></app-cv-edit-button>
 </div>
 
-<div class="gallery-grid">
+<app-curriculum-types-info *ngIf="!showGalleryGrid"></app-curriculum-types-info>
+
+<div class="gallery-grid" *ngIf="showGalleryGrid">
     <app-edit-about-me *ngIf="shouldShowComponent('sobre-mi')" [currentUser]="currentUser">
     </app-edit-about-me>
     <app-edit-academic-formation *ngIf="shouldShowComponent('formacion')"
