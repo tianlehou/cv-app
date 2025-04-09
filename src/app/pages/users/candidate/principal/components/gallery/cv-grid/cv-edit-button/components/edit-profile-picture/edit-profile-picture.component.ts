@@ -14,7 +14,7 @@ import {
   getDownloadURL,
   deleteObject,
 } from '@angular/fire/storage';
-import { FirebaseService } from '../../../../../../shared/services/firebase.service';
+import { FirebaseService } from '../../../../../../../../../../shared/services/firebase.service';
 import { User } from '@angular/fire/auth';
 
 @Component({

@@ -13,10 +13,14 @@ import {
 import { User } from '@angular/fire/auth';
 import { CommonModule, NgStyle } from '@angular/common';
 import { FileSizePipe } from '../../../../../../../shared/pipes/filesize.pipe';
-import { VideoService } from '../../../../../../../shared/services/video.service';
 import { ToastService } from '../../../../../../../shared/services/toast.service';
 import { FirebaseService } from '../../../../../../../shared/services/firebase.service';
 import { ConfirmationModalService } from '../../../../../../../shared/services/confirmation-modal.service';
+import { formatEmailKey, sortVideosByDate, initExpandedStates, validateCurrentUser, trackByVideoUrl,
+  setupVideoPlayers, onVideoPlay, handleError, calculateTotalSize, updateState, handleVideoUpload, updateUserVideos
+} from './video.utils';
+import { VideoGridState, UploadProgress } from './video-grid.types';
+import { VideoService } from './video.service';
 
 @Component({
   selector: 'app-video-grid',
@@ -29,16 +33,15 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
   @ViewChildren('videoPlayer') videoPlayers!: QueryList<ElementRef<HTMLVideoElement>>;
   @Input() currentUser: User | null = null;
   
-  userEmailKey: string | null = null;
-  userVideos: string[] = [];
-  isLoading = false;
-  expandedStates: { [videoUrl: string]: boolean } = {};
-  totalUploadedMB = 0;
-  
-  // Upload progress
-  uploadProgress: number | null = null;
-  uploadedSize = 0;
-  totalSize = 0;
+  state: VideoGridState = {
+    userVideos: [],
+    isLoading: false,
+    expandedStates: {},
+    totalUploadedMB: 0,
+    uploadProgress: null,
+    uploadedSize: 0,
+    totalSize: 0
+  };
 
   private videoService = inject(VideoService);
   private toast = inject(ToastService);
@@ -48,9 +51,9 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
   private ngZone = inject(NgZone);
 
   ngOnInit(): void {
-    if (this.currentUser?.email) {
-      this.userEmailKey = this.formatEmailKey(this.currentUser.email);
-      this.loadVideos();
+    if (validateCurrentUser(this.currentUser)) {
+      const userEmailKey = formatEmailKey(this.currentUser!.email!);
+      this.loadVideos(userEmailKey);
     }
   }
 
@@ -59,76 +62,18 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
     this.videoPlayers.changes.subscribe(() => this.setupVideoPlayers());
   }
 
-  private setupVideoPlayers(): void {
-    this.videoPlayers.forEach(video => {
-      video.nativeElement.addEventListener('play', (e: Event) => this.onVideoPlay(e));
-    });
-  }
-
-  private onVideoPlay(event: Event): void {
-    const playingVideo = event.target as HTMLVideoElement;
-    this.videoPlayers.forEach(video => {
-      if (video.nativeElement !== playingVideo) {
-        video.nativeElement.pause();
-      }
-    });
-  }
-
-  private formatEmailKey(email: string): string {
-    return email.replace(/\./g, '_');
-  }
-
-  private async loadVideos(): Promise<void> {
-    if (!this.userEmailKey) return;
-    this.setLoading(true);
-    
-    try {
-      const videos = await this.videoService.getVideos(this.userEmailKey);
-      const sortedVideos = this.sortVideosByDate(videos);
-      this.calculateTotalSize(sortedVideos);
-      
-      this.ngZone.run(() => {
-        this.userVideos = sortedVideos;
-        this.initExpandedStates(sortedVideos);
-        this.cdr.detectChanges();
-      });
-    } catch (error) {
-      this.handleError('Error cargando videos', error);
-    } finally {
-      this.setLoading(false);
-    }
-  }
-
-  private async calculateTotalSize(videos: string[]): Promise<void> {
-    try {
-      const totalBytes = await this.videoService.calculateTotalSize(videos);
-      this.totalUploadedMB = totalBytes / 1048576;
-      this.cdr.detectChanges();
-    } catch (error) {
-      console.error('Error calculando tamaño total:', error);
-    }
-  }
-
-  private initExpandedStates(videos: string[]): void {
-    this.expandedStates = {};
-    videos.forEach(video => {
-      this.expandedStates[video] = false;
-    });
-  }
-
-  private sortVideosByDate(videos: string[]): string[] {
-    return [...videos].sort((a, b) => {
-      const getTimestamp = (url: string) => {
-        const filename = url.split('%2F').pop()?.split('?')[0] || '';
-        const timestampMatch = filename.match(/-(\d+)\./);
-        return timestampMatch ? parseInt(timestampMatch[1], 10) : 0;
-      };
-      return getTimestamp(b) - getTimestamp(a);
-    });
-  }
-
   toggleExpansion(videoUrl: string): void {
-    this.expandedStates[videoUrl] = !this.expandedStates[videoUrl];
+    this.state = updateState(
+      this.state,
+      {
+        expandedStates: {
+          ...this.state.expandedStates,
+          [videoUrl]: !this.state.expandedStates[videoUrl]
+        }
+      },
+      this.ngZone,
+      this.cdr
+    );
   }
 
   onFileSelected(event: Event): void {
@@ -145,53 +90,6 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
     this.uploadVideo(file);
   }
 
-  private async uploadVideo(file: File): Promise<void> {
-    if (!this.userEmailKey || !this.currentUser?.email) return;
-
-    this.setUploadProgress(0, 0, file.size);
-    this.setLoading(true);
-
-    try {
-      const downloadURL = await this.videoService.uploadVideo(
-        this.userEmailKey,
-        file,
-        (progress, uploaded, total) => {
-          this.ngZone.run(() => this.setUploadProgress(progress, uploaded, total));
-        }
-      );
-
-      await this.updateUserVideos([...this.userVideos, downloadURL]);
-      this.toast.show('Video subido exitosamente', 'success');
-      this.loadVideos();
-    } catch (error) {
-      this.handleError('Error al subir el video', error);
-    } finally {
-      this.resetUploadState();
-    }
-  }
-
-  private async updateUserVideos(videos: string[]): Promise<void> {
-    if (!this.userEmailKey || !this.currentUser?.email) return;
-  
-    try {
-      // Obtener datos actuales primero
-      const currentData = await this.firebaseService.getUserData(this.userEmailKey);
-      const updatedData = {
-        profileData: {
-          ...currentData.profileData,
-          multimedia: {
-            ...currentData.profileData?.multimedia,
-            galleryVideos: videos
-          }
-        }
-      };
-  
-      await this.firebaseService.updateUserData(this.currentUser.email, updatedData);
-    } catch (error) {
-      this.handleError('Error actualizando videos', error);
-    }
-  }
-
   confirmDeleteVideo(videoUrl: string): void {
     this.confirmationModal.show(
       {
@@ -202,53 +100,151 @@ export class VideoGridComponent implements OnInit, AfterViewInit {
     );
   }
 
-  private async deleteVideo(videoUrl: string): Promise<void> {
-    if (!this.userEmailKey) return;
-    this.setLoading(true);
+  private async uploadVideo(file: File): Promise<void> {
+    if (!validateCurrentUser(this.currentUser)) return;
+
+    const userEmailKey = formatEmailKey(this.currentUser!.email!);
+    this.state = updateState(
+      this.state,
+      {
+        uploadProgress: 0,
+        uploadedSize: 0,
+        totalSize: file.size,
+        isLoading: true
+      },
+      this.ngZone,
+      this.cdr
+    );
 
     try {
-      await this.videoService.deleteVideo(videoUrl);
-      const updatedVideos = this.userVideos.filter(vid => vid !== videoUrl);
-      await this.updateUserVideos(updatedVideos);
-      this.toast.show('Video eliminado exitosamente', 'success');
-      this.loadVideos();
+      const downloadURL = await handleVideoUpload(
+        file,
+        userEmailKey,
+        this.videoService,
+        (progress, uploaded, total) => {
+          this.updateUploadProgress({ progress, uploaded, total });
+        }
+      );
+
+      await updateUserVideos(
+        [...this.state.userVideos, downloadURL],
+        this.currentUser!,
+        this.firebaseService
+      );
+
+      this.toast.show('Video subido exitosamente', 'success');
+      this.loadVideos(userEmailKey);
     } catch (error) {
-      this.handleError('Error eliminando video', error);
+      handleError('Error al subir el video', error, this.toast, this.ngZone);
     } finally {
-      this.setLoading(false);
+      this.state = updateState(
+        this.state,
+        {
+          uploadProgress: null,
+          uploadedSize: 0,
+          totalSize: 0,
+          isLoading: false
+        },
+        this.ngZone,
+        this.cdr
+      );
     }
   }
 
-  // Helpers
-  private setLoading(isLoading: boolean): void {
-    this.ngZone.run(() => {
-      this.isLoading = isLoading;
-      this.cdr.detectChanges();
-    });
+  private async deleteVideo(videoUrl: string): Promise<void> {
+    if (!validateCurrentUser(this.currentUser)) return;
+
+    this.state = updateState(
+      this.state,
+      { isLoading: true },
+      this.ngZone,
+      this.cdr
+    );
+
+    try {
+      await this.videoService.deleteVideo(videoUrl);
+      const updatedVideos = this.state.userVideos.filter(vid => vid !== videoUrl);
+      await updateUserVideos(
+        updatedVideos,
+        this.currentUser!,
+        this.firebaseService
+      );
+      this.toast.show('Video eliminado exitosamente', 'success');
+      this.loadVideos(formatEmailKey(this.currentUser!.email!));
+    } catch (error) {
+      handleError('Error eliminando video', error, this.toast, this.ngZone);
+    } finally {
+      this.state = updateState(
+        this.state,
+        { isLoading: false },
+        this.ngZone,
+        this.cdr
+      );
+    }
   }
 
-  private setUploadProgress(progress: number, uploaded: number, total: number): void {
-    this.uploadProgress = progress;
-    this.uploadedSize = uploaded;
-    this.totalSize = total;
-    this.cdr.detectChanges();
+  private setupVideoPlayers(): void {
+    setupVideoPlayers(
+      this.videoPlayers,
+      (e: Event) => this.onVideoPlay(e)
+    );
   }
 
-  private resetUploadState(): void {
-    this.ngZone.run(() => {
-      this.uploadProgress = null;
-      this.uploadedSize = 0;
-      this.totalSize = 0;
-      this.isLoading = false;
-      this.cdr.detectChanges();
-    });
+  private onVideoPlay(event: Event): void {
+    onVideoPlay(event, this.videoPlayers);
   }
 
-  private handleError(message: string, error: any): void {
-    this.ngZone.run(() => {
-      console.error(`${message}:`, error);
-      this.toast.show(message, 'error');
-      this.cdr.detectChanges();
-    });
+  private async loadVideos(userEmailKey: string): Promise<void> {
+    this.state = updateState(
+      this.state,
+      { isLoading: true },
+      this.ngZone,
+      this.cdr
+    );
+    
+    try {
+      const videos = await this.videoService.getVideos(userEmailKey);
+      const sortedVideos = sortVideosByDate(videos);
+      const totalUploadedMB = await calculateTotalSize(
+        sortedVideos,
+        this.videoService
+      );
+      
+      this.state = updateState(
+        this.state,
+        {
+          userVideos: sortedVideos,
+          expandedStates: initExpandedStates(sortedVideos),
+          totalUploadedMB,
+          isLoading: false
+        },
+        this.ngZone,
+        this.cdr
+      );
+    } catch (error) {
+      handleError('Error cargando videos', error, this.toast, this.ngZone);
+      this.state = updateState(
+        this.state,
+        { isLoading: false },
+        this.ngZone,
+        this.cdr
+      );
+    }
   }
+
+  private updateUploadProgress({ progress, uploaded, total }: UploadProgress): void {
+    this.state = updateState(
+      this.state,
+      {
+        uploadProgress: progress,
+        uploadedSize: uploaded,
+        totalSize: total
+      },
+      this.ngZone,
+      this.cdr
+    );
+  }
+
+  // Helper para el template (trackBy function)
+  trackByVideoUrl = trackByVideoUrl;
 }

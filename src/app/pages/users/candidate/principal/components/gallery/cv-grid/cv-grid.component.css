@@ -1,52 +1,22 @@
-.cv-grid {
+.top-row {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 15px;
-}
-
-.cv-item {
-    display: flex;
+    grid-template-columns: 1fr auto;
     align-items: center;
-    background: white;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+    gap: 1rem;
+    margin: 0 1rem;
 }
 
-.cv-item:hover {
-    transform: translateY(-5px);
+.gallery-grid {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px;
 }
 
-.cv-icon {
-    font-size: 2rem;
-    color: #e74c3c;
-    margin-right: 15px;
-}
-
-.cv-info h4 {
-    margin: 0 0 5px 0;
-    color: #2c3e50;
-}
-
-.cv-info p {
-    margin: 0 0 10px 0;
-    color: #7f8c8d;
-    font-size: 0.9rem;
-}
-
-.download-btn {
-    display: inline-block;
-    background: #3498db;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-size: 0.8rem;
-    transition: background 0.3s ease;
-}
-
-.download-btn:hover {
-    background: #2980b9;
+/* Opcional: Estilo para cuando no hay componente seleccionado */
+.gallery-grid:empty::before {
+    content: "Selecciona una opción de edición";
+    text-align: center;
+    color: var(--text-color-light);
+    padding: 2rem;
 }

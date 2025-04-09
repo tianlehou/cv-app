@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FirebaseService } from '../../../../../../shared/services/firebase.service';
-import { ConfirmationModalService } from '../../../../../../shared/services/confirmation-modal.service';
+import { FirebaseService } from '../../../../../../../../../../shared/services/firebase.service';
+import { ConfirmationModalService } from '../../../../../../../../../../shared/services/confirmation-modal.service';
 import { User } from '@angular/fire/auth';
 
 @Component({

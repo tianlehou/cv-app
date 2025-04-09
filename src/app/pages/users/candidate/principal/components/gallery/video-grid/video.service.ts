@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage, ref, getDownloadURL, deleteObject, uploadBytesResumable, getMetadata } from '@angular/fire/storage';
-import { FirebaseService } from './firebase.service';
+import { FirebaseService } from '../../../../../../../shared/services/firebase.service';
 
 @Injectable({ providedIn: 'root' })
 export class VideoService {

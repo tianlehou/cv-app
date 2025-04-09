@@ -4,7 +4,7 @@
     </app-image-upload-button>
 </div>
 
-<div class="image-grid">
+<div class="gallery-grid">
     <!-- Images Item Container -->
     <app-image-item-container *ngFor="let image of userImages" [imageUrl]="image" [currentUser]="currentUser"
         [userEmailKey]="userEmailKey" (imageDeleted)="onImageDeleted($event)"></app-image-item-container>
