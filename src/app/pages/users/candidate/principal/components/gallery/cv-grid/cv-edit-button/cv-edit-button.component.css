@@ -12,7 +12,6 @@
   transition: all 0.3s ease-in-out;
   animation: pulse 1.5s infinite;
   cursor: pointer;
-  z-index: 9999;
 }
 
 .upload-button.paused {
