@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FirebaseService } from '../../../shared/services/firebase.service';
+import { FirebaseService } from '../../../../../../shared/services/firebase.service';
 
 @Component({
   selector: 'app-candidate-forgot-password',
@@ -13,11 +13,17 @@ import { FirebaseService } from '../../../shared/services/firebase.service';
 })
 export class CandidateForgotPasswordComponent {
   forgotPasswordForm: FormGroup;
+  @Output() showLogin = new EventEmitter<void>();
 
   constructor(private fb: FormBuilder, private firebaseService: FirebaseService) {
     this.forgotPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
+  }
+
+  // Métodos para manejar los clicks
+  onLoginClick() {
+    this.showLogin.emit();
   }
 
   recoverPassword() {

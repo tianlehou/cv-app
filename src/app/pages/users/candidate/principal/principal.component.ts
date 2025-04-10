@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FirebaseService } from '../../../../shared/services/firebase.service';
@@ -10,6 +10,7 @@ import { SidebarComponent } from '../../../../shared/components/buttons/sidebar/
 import { ProfilePictureComponent } from './components/profile-picture/profile-picture.component';
 import { PersonalDataComponent } from './components/personal-data/personal-data.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
+
 @Component({
   selector: 'app-principal',
   standalone: true,
@@ -24,17 +25,14 @@ import { GalleryComponent } from './components/gallery/gallery.component';
   templateUrl: './principal.component.html',
   styleUrls: [
     './principal.component.css',
-    './back-to-top.component.css',
     '../../../../shared/components/buttons/custom-button/custom-button.component.css',
   ],
 })
-export class PrincipalComponent implements OnInit, AfterViewInit {
+export class PrincipalComponent implements OnInit {
   currentUser: any = null;
   userRole: string | null = null;
-  @ViewChild('profileContainer') profileContainer!: ElementRef;
-  showBackToTop = false;
 
-  constructor(private firebaseService: FirebaseService) {} // Inyecta el servicio
+  constructor(private firebaseService: FirebaseService) {}
 
   async ngOnInit(): Promise<void> {
 
@@ -56,37 +54,5 @@ export class PrincipalComponent implements OnInit, AfterViewInit {
           console.error('Usuario no autenticado.');
         }
       });
-  }
-
-  ngAfterViewInit() {
-    this.checkScrollPosition();
-  }
-
-  @HostListener('window:scroll')
-  onWindowScroll() {
-    this.checkScrollPosition();
-  }
-
-  checkScrollPosition() {
-    if (this.profileContainer) {
-      const container = this.profileContainer.nativeElement;
-      const containerRect = container.getBoundingClientRect();
-      const containerBottom = containerRect.bottom;
-      const windowHeight = window.innerHeight;
-      const scrollPosition = window.scrollY || window.pageYOffset;
-
-      // Mostrar el botón cuando el usuario haya llegado al final del componente
-      const componentHeight = containerRect.height;
-      const triggerPoint = componentHeight * 0.7; // Mostrar después del 70% del componente
-      
-      this.showBackToTop = containerBottom <= windowHeight + 100;
-    }
-  }
-
-  scrollToTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
   }
 }

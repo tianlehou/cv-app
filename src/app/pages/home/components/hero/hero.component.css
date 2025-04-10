@@ -45,12 +45,6 @@ header {
     z-index: 1;
 }
 
-app-custom-button {
-    position: fixed;
-    top: 25px;
-    right: 25px;
-}
-
 .container {
     position: relative;
     z-index: 2;

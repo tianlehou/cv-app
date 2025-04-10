@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -6,7 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { FirebaseService } from '../../../shared/services/firebase.service';
+import { FirebaseService } from '../../../../../../shared/services/firebase.service';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -25,6 +25,7 @@ export class CandidateRegisterComponent {
   emailErrorMessage: string | null = null; // Mensaje de error para el correo
   passwordErrorMessage: string | null = null; // Mensaje de error para la contraseña
   confirmPasswordErrorMessage: string | null = null; // Mensaje de error para la confirmación de contraseña
+  @Output() showLogin = new EventEmitter<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -37,6 +38,11 @@ export class CandidateRegisterComponent {
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
     });
+  }
+
+  // Métodos para manejar los clicks
+  onLoginClick() {
+    this.showLogin.emit();
   }
 
   togglePasswordVisibility() {

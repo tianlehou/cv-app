@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { CustomButtonComponent } from '../../../../shared/components/buttons/custom-button/custom-button.component';
-import { UserTypeModalComponent } from '../../user-type-modal/user-type-modal.component';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CustomButtonComponent, UserTypeModalComponent],
+  imports: [],
   templateUrl: './hero.component.html',
   styleUrl: './hero.component.css'
 })

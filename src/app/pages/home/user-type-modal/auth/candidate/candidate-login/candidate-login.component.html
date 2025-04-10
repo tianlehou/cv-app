@@ -4,16 +4,20 @@
     <!-- Email -->
     <div class="form-group">
       <label for="email">Email</label>
-      <input type="email" id="email" class="form-control" formControlName="email" [ngClass]="{
-          'is-invalid':
-            loginForm.get('email')?.invalid && loginForm.get('email')?.touched
-        }" />
-      <div class="invalid-feedback" *ngIf="loginForm.get('email')?.errors?.['required']">
-        El email es obligatorio.
+      <input type="email" id="email" class="form-control" formControlName="email" 
+             [ngClass]="{'is-invalid': (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) || emailErrorMessage}">
+      
+      <!-- Mensajes de validación básica -->
+      <div *ngIf="loginForm.get('email')?.touched">
+        <div class="invalid-feedback" *ngIf="loginForm.get('email')?.errors?.['required']">
+          El email es obligatorio.
+        </div>
+        <div class="invalid-feedback" *ngIf="loginForm.get('email')?.errors?.['email']">
+          Introduce un email válido.
+        </div>
       </div>
-      <div class="invalid-feedback" *ngIf="loginForm.get('email')?.errors?.['email']">
-        Introduce un email válido.
-      </div>
+      
+      <!-- Mensaje de error de Firebase -->
       <div class="invalid-feedback" *ngIf="emailErrorMessage">
         {{ emailErrorMessage }}
       </div>
@@ -24,18 +28,23 @@
       <label for="password">Contraseña</label>
       <div class="input-group">
         <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" formControlName="password"
-          [ngClass]="{
-            'is-invalid':
-              loginForm.get('password')?.invalid &&
-              loginForm.get('password')?.touched
-          }" />
+               [ngClass]="{'is-invalid': (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) || passwordErrorMessage}">
         <button type="button" class="btn btn-outline-secondary" (click)="togglePasswordVisibility()">
           {{ showPassword ? "Ocultar" : "Mostrar" }}
         </button>
       </div>
-      <div class="invalid-feedback" *ngIf="loginForm.get('password')?.errors?.['required']">
-        La contraseña es obligatoria.
+      
+      <!-- Mensajes de validación básica -->
+      <div *ngIf="loginForm.get('password')?.touched">
+        <div class="invalid-feedback" *ngIf="loginForm.get('password')?.errors?.['required']">
+          La contraseña es obligatoria.
+        </div>
+        <div class="invalid-feedback" *ngIf="loginForm.get('password')?.errors?.['minlength']">
+          La contraseña debe tener al menos 6 caracteres.
+        </div>
       </div>
+      
+      <!-- Mensaje de error de Firebase -->
       <div class="invalid-feedback" *ngIf="passwordErrorMessage">
         {{ passwordErrorMessage }}
       </div>
@@ -48,7 +57,7 @@
 
     <!-- Enlace de "¿Olvidaste la contraseña?" -->
     <section class="forgotPasswordLink">
-      <a routerLink="/candidate-forgot-password">¿Olvidaste la contraseña?</a>
+      <a (click)="onForgotPasswordClick()">¿Olvidaste la contraseña?</a>
     </section>
 
     <!-- Botón de Iniciar Sesión -->
@@ -58,7 +67,8 @@
 
     <!-- Enlace de "Regístrate" -->
     <section class="signupLink">
-      <Label>¿No tienes una cuenta? </Label><a routerLink="/candidate-register"> Regístrate</a>
+      <Label>¿No tienes una cuenta?</Label>
+      <span (click)="onRegisterClick()">Regístrate</span>
     </section>
   </form>
 
@@ -66,5 +76,4 @@
   <div class="separator display-flex-center">o</div>
   <app-google-login (loginSuccess)="handleGoogleSuccess()" (loginError)="handleGoogleError($event)">
   </app-google-login>
-
 </div>

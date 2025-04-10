@@ -1,24 +1,34 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-user-type-modal',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule],
   templateUrl: './user-type-modal.component.html',
-  styleUrls: ['./user-type-modal.component.css'],
+  styleUrls: ['./user-type-modal.component.css']
 })
 export class UserTypeModalComponent {
-  @ViewChild('userTypeModal', { static: false }) userTypeModal!: ElementRef;
+  isVisible = false;
+  @Output() userTypeSelected = new EventEmitter<'candidate' | 'company'>();
+
+  openModal() {
+    this.isVisible = true;
+  }
 
   closeModal() {
-    // Cerrar modal de Bootstrap si está presente
-    document.body.classList.remove('modal-open'); // Permitir scroll nuevamente
-    document.querySelector('.modal-backdrop')?.remove(); // Eliminar fondo gris
-    
-    // Restaurar el scroll si quedó bloqueado
-    document.body.style.overflow = '';
-    document.documentElement.style.overflow = '';
+    this.isVisible = false;
+  }
+
+  selectUserType(type: 'candidate' | 'company') {
+    this.userTypeSelected.emit(type);
+    this.closeModal();
+    setTimeout(() => { // ← Añade este timeout
+      document.body.classList.remove('modal-open');
+      const backdrops = document.getElementsByClassName('modal-backdrop');
+      while (backdrops.length > 0) {
+        backdrops[0].remove();
+      }
+    }, 100);
   }
 }
