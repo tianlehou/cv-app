@@ -53,9 +53,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px dashed var(--clr-red);
+  border: 5px dashed var(--clr-red);
   border-radius: 50%;
-  padding: 5px;
+  padding: 15px;
   color: var(--clr-red);
   font-size: 2rem;
   cursor: pointer;
@@ -65,7 +65,7 @@
 }
 
 .close-icon:hover {
-  transform: rotate(90deg);
+  transform: rotate(180deg);
 }
 
 .main-menu {

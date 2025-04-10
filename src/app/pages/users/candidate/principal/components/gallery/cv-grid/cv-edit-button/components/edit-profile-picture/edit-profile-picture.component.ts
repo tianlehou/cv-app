@@ -14,6 +14,7 @@ import {
   getDownloadURL,
   deleteObject,
 } from '@angular/fire/storage';
+import { ProfilePictureService } from '../../../../../../services/profile-picture.service';
 import { FirebaseService } from '../../../../../../../../../../shared/services/firebase.service';
 import { User } from '@angular/fire/auth';
 
@@ -33,7 +34,8 @@ export class EditProfilePictureComponent implements OnInit, OnChanges {
   constructor(
     private fb: FormBuilder,
     private storage: Storage,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private profilePictureService: ProfilePictureService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -129,19 +131,21 @@ export class EditProfilePictureComponent implements OnInit, OnChanges {
       // 4. Crear objeto actualizado manteniendo todos los datos existentes
       const updatedData = {
         profileData: {
-          ...userData?.profileData || {}, // Mantener todos los datos existentes
+          ...(userData?.profileData || {}), // Mantener todos los datos existentes
           multimedia: {
-            ...userData?.profileData?.multimedia || {},
+            ...(userData?.profileData?.multimedia || {}),
             picture: {
-              ...userData?.profileData?.multimedia?.picture || {},
-              profilePicture: downloadURL // Solo actualizar este campo
-            }
-          }
-        }
+              ...(userData?.profileData?.multimedia?.picture || {}),
+              profilePicture: downloadURL, // Solo actualizar este campo
+            },
+          },
+        },
       };
 
       // 5. Actualizar en Firebase
       await this.firebaseService.updateUserData(this.currentUser.email, updatedData);
+      // Notifica el cambio
+      this.profilePictureService.notifyProfilePictureUpdate(downloadURL);
 
       alert('¡Foto actualizada correctamente!');
       await this.loadUserData();
