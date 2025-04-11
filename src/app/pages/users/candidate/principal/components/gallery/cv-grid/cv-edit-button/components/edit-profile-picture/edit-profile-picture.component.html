@@ -3,10 +3,10 @@
     <div class="form-group">
       <div class="display-flex-center">
         <label for="profilePicture">Foto de Perfil:</label>
-        <!-- Añadir imagen por defecto -->
         <img
           [src]="profileForm.get('profilePicture')?.value"
           class="profile-picture-preview"
+          alt="Vista previa de la foto de perfil"
         />
       </div>
       <input

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from '@angular/fire/auth';
 import { FirebaseService } from '../../../../../../shared/services/firebase.service';
-import { ProfilePictureService } from '../../services/profile-picture.service';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-profile-picture',
@@ -25,11 +25,11 @@ export class ProfilePictureComponent {
 
   constructor(
     private firebaseService: FirebaseService,
-    private profilePictureService: ProfilePictureService
+    private profileService: ProfileService
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.profilePictureService.profilePictureUpdated$.subscribe(
+    this.subscription = this.profileService.profilePictureUpdated$.subscribe(
       (newUrl) => {
         if (newUrl) {
           this.profilePictureUrl = newUrl;
