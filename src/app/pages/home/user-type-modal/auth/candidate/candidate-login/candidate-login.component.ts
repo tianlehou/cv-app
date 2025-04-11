@@ -31,6 +31,7 @@ export class CandidateLoginComponent {
   passwordErrorMessage: string | null = null;
   @Output() showRegister = new EventEmitter<void>();
   @Output() showForgotPassword = new EventEmitter<void>();
+  @Output() showHome = new EventEmitter<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -51,11 +52,17 @@ export class CandidateLoginComponent {
     });
   }
 
-  // Métodos para manejar los clicks
+  // método de regreso a #home
+  goBackToHome() {
+    this.showHome.emit();
+  }
+
+  // Método para manejar el click en "Registrarse"
   onRegisterClick() {
     this.showRegister.emit();
   }
 
+  // Método para manejar el click en "Olvidé mi contraseña"
   onForgotPasswordClick() {
     this.showForgotPassword.emit();
   }
@@ -76,7 +83,7 @@ export class CandidateLoginComponent {
   login() {
     // Marcar todos los campos como touched para mostrar errores de validación
     this.markFormGroupTouched(this.loginForm);
-    
+
     const { email, password } = this.loginForm.value;
 
     // Limpiar mensajes anteriores

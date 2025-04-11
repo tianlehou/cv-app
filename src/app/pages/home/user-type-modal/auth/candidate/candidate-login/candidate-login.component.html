@@ -1,4 +1,8 @@
 <div class="login-container">
+    <!-- botón de regreso -->
+    <button class="back-button" (click)="goBackToHome()">
+      <i class="fas fa-arrow-left"></i> Regresar
+    </button>
   <h2>Iniciar Sesión</h2>
   <form (ngSubmit)="login()" [formGroup]="loginForm" novalidate>
     <!-- Email -->
