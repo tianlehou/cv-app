@@ -110,7 +110,7 @@ header {
   .red {
     border-left-color: var(--clr-red);
 
-    .fa-exclamation-triangle {
+    .fa-ban {
       background: var(--clr-red);
     }
   }
@@ -126,7 +126,7 @@ header {
   .green {
     border-left-color: var(--clr-green);
 
-    .fa-check-double {
+    .fa-check-circle {
       background: var(--clr-green);
     }
   }

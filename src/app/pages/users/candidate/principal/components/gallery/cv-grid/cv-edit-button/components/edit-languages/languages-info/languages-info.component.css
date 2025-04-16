@@ -94,23 +94,15 @@ header {
   .blue {
     border-left-color: var(--clr-blue);
 
-    .fa-lightbulb {
+    .fa-globe-americas {
       background: var(--clr-blue);
-    }
-  }
-
-  .orange {
-    border-left-color: var(--clr-orange);
-
-    .fa-lightbulb {
-      background: var(--clr-orange);
     }
   }
 
   .red {
     border-left-color: var(--clr-red);
 
-    .fa-exclamation-triangle {
+    .fa-exclamation-circle {
       background: var(--clr-red);
     }
   }
@@ -126,7 +118,7 @@ header {
   .green {
     border-left-color: var(--clr-green);
 
-    .fa-check-double {
+    .fa-list-alt {
       background: var(--clr-green);
     }
   }

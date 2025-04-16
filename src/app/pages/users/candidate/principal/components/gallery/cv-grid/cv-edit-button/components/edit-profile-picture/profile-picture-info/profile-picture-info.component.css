@@ -68,7 +68,7 @@ header {
     font-size: 1.3rem;
 
     i {
-      font-size: 1.5rem;
+      font-size: 2rem;
     }
   }
 }
@@ -94,31 +94,15 @@ header {
   .blue {
     border-left-color: var(--clr-blue);
 
-    .fa-lightbulb {
+    .fa-history {
       background: var(--clr-blue);
-    }
-  }
-
-  .orange {
-    border-left-color: var(--clr-orange);
-
-    .fa-lightbulb {
-      background: var(--clr-orange);
-    }
-  }
-
-  .red {
-    border-left-color: var(--clr-red);
-
-    .fa-exclamation-triangle {
-      background: var(--clr-red);
     }
   }
 
   .purple {
     border-left-color: var(--clr-purple);
 
-    .fa-file-alt {
+    .fa-camera {
       background: var(--clr-purple);
     }
   }
@@ -126,7 +110,7 @@ header {
   .green {
     border-left-color: var(--clr-green);
 
-    .fa-check-double {
+    .fa-blender-phone {
       background: var(--clr-green);
     }
   }
@@ -280,33 +264,6 @@ header {
 
     i {
       background: var(--clr-purple);
-    }
-  }
-
-  .clr-red {
-    background: rgba(239, 68, 68, 0.08);
-    border-left: 4px solid var(--clr-red);
-
-    i {
-      background: var(--clr-red);
-    }
-  }
-
-  .clr-yellow {
-    background: rgba(234, 179, 8, 0.08);
-    border-left: 4px solid var(--clr-yellow);
-
-    i {
-      background: var(--clr-yellow);
-    }
-  }
-
-  .clr-orange {
-    background: rgba(249, 115, 22, 0.08);
-    border-left: 4px solid var(--clr-orange);
-
-    i {
-      background: var(--clr-orange);
     }
   }
 }

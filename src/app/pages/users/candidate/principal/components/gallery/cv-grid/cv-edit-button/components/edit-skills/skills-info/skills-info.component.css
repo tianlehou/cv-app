@@ -99,18 +99,10 @@ header {
     }
   }
 
-  .orange {
-    border-left-color: var(--clr-orange);
-
-    .fa-lightbulb {
-      background: var(--clr-orange);
-    }
-  }
-
   .red {
     border-left-color: var(--clr-red);
 
-    .fa-exclamation-triangle {
+    .fa-ban {
       background: var(--clr-red);
     }
   }
@@ -126,7 +118,7 @@ header {
   .green {
     border-left-color: var(--clr-green);
 
-    .fa-check-double {
+    .fa-check-circle {
       background: var(--clr-green);
     }
   }

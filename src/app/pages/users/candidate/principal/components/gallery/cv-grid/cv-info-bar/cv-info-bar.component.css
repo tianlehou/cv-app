@@ -1,52 +1,49 @@
-.gallery-info {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    background: var(--clr-white);
-    border: 1px solid var(--bg-light);
-    border-radius: 8px;
-    height: 40px;
+/* Contenedor principal */
+.cv-info-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
-/* ícono de información con animación */
-.info-icon {
-    font-size: 1rem;
-    color: var(--clr-blue);
-    background: var(--clr-white);
-    border: 2px solid var(--clr-blue);
-    border-radius: 50%;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    margin-left: 1rem;
+.button-container {
+  display: flex;
+  width: 100%;
+  max-width: 800px;
+  gap: 8px;
+  border-radius: 12px;
 }
 
-@keyframes attention {
-
-    0%,
-    40% {
-        transform: translateX(0) rotate(0deg);
-    }
-
-    10% {
-        transform: translateX(25px) rotate(45deg);
-    }
-
-    20% {
-        transform: translateX(-140px) rotate(-90deg);
-    }
-
-    30% {
-        transform: translateX(15px) rotate(45deg);
-    }
+/* Estilo moderno minimalista para los botones */
+.cv-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: var(--clr-purple-dark);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--clr-purple-light);
+  border-radius: 8px;
+  background: var(--bg-purple);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.info-icon.attention {
-    animation: attention 10s ease-in-out infinite;
+/* Efecto hover moderno */
+.cv-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Efecto al hacer click */
+.cv-button:active {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.02);
 }
