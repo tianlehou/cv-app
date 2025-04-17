@@ -1,5 +1,6 @@
+<!-- video-upload-progress-bar.component.html -->
 <div class="upload-progress">
-    <div class="progress-bar" [ngStyle]="{ 'width': uploadProgress + '%' }">
+    <div class="progress-bar" [style.width]="uploadProgress + '%'">
         {{ uploadProgress }}%
     </div>
     <div class="progress-size">

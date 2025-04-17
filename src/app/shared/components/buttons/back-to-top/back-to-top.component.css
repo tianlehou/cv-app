@@ -8,8 +8,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: white;
-    border: 2px dashed var(--clr-blue);
+    background: var(--bg-blue);
+    border: 2px dashed var(--clr-blue-light);
     overflow: hidden;
     transition: all 0.3s ease-in-out;
     animation: pulse 1.5s infinite;
@@ -28,7 +28,7 @@
 .back-to-top i {
     font-size: 1.5rem;
     cursor: pointer;
-    color: var(--clr-blue);
+    color: var(--clr-blue-light);
 }
 
 @keyframes pulse {
